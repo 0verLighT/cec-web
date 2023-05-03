@@ -8,10 +8,10 @@
         // sert a donner un temps a chaque valeur de l'input
         let s = teamA.length;
         //recupere la valeur de l'input en Int
-        let value = parseInt(event.target.value) ;
+        let value = event.target.value ;
         //si la valeur est inferieur a 0 ou superieur a 12 alors on ne fait rien
-        if (event.target.value <= 0 || event.target.value > 12) {
-            return ;
+        if (value <= 0 || value > 12 || value == NaN) {
+            return;
         };
         //si la longueur de l'array est superieur ou egal a 7 alors on ne fait rien
         if (teamA.length >= 7) {
@@ -20,7 +20,7 @@
         }
         //on ajoute la valeur de l'input dans l'array teamA
         const team = {
-        ms:value,
+        ms:parseInt(value),
         s:s++,
         };
         //on ajoute la valeur de l'input dans l'array teamA
