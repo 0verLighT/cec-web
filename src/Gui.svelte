@@ -1,9 +1,30 @@
 <script>
+    import { each, element } from "svelte/internal";
+
     //Initialisation de l'array teamA
-    let teamA = [
+     export let teamA = [
         {ms: 0, s: 0},
     ];
     
+//calculer la distance de chaque point a parti de la vitesse de chaque point
+function calculDistance() {
+    let distanceTotal = 0;
+    
+            for (let i = 0; i < teamA.length; i++) {
+                distanceTotal =  distanceTotal  + teamA[i].ms;
+                
+            }
+            console.log(distanceTotal);
+            //mettre dans une boucle
+            if (distanceTotal >= 50) {
+                // calculer le temps
+                
+            } else {
+                // ajouter un point
+                
+                }
+        };
+
     function adddata() {
         // sert a donner un temps a chaque valeur de l'input
         let s = teamA.length;
@@ -16,6 +37,7 @@
         //si la longueur de l'array est superieur ou egal a 7 alors on ne fait rien
         if (teamA.length >= 7) {
             console.log(teamA);
+            calculDistance();
             return ;
         }
         //on ajoute la valeur de l'input dans l'array teamA
@@ -28,6 +50,7 @@
         //on vide l'input
         event.target.value = "";
     }
+        
 </script>
 <div>
     <h3>TEAM A</h3>
