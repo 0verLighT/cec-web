@@ -4,7 +4,7 @@ const vitesse_teamA = document.getElementById("vitesse_teamA");
 const box_info = document.getElementById("box_info");
 const box_check = document.getElementById("box_info_check");
 const btn_check = document.getElementById("btn_check");
-
+const section_teamA = document.getElementById("team_A");
 let teamA = [
   {ms:0,s:0},
 ];
@@ -133,11 +133,11 @@ function checkSettingsTeamA() {
     } 
     if (span_name_teamA == null || span_name_teamA.innerHTML === "" || span_name_teamA.innerHTML === "()") {
       name_teamA = "Equipe A";
-      console.log(name_teamA);
     } else {
       name_teamA = (span_name_teamA.innerHTML).replace("(", "").replace(")", "");
       console.log(name_teamA);
   }
+  section_teamA.style.display = "none";
 }
 //setup de box info pour toutes erreures
 /**
