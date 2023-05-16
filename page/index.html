@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One&display=swap" rel="stylesheet">
+    <title>Simulateur - Course en cours</title>
+</head>
+<body>
+    <section id="team_A">
+        <h3 class="name-tag">Équipe 1 <span id="Name_team_span"></span></h3>
+        <div class="flexA">
+            <div class="input_data">
+                <input type="text" name="Nom_equipe" id="Name_team" placeholder="Nom de l'équipe">
+                    <span>vos données</span>
+                    <input type="number" name="vitesse" id="vitesse_teamA" placeholder="Entre 0 et 12 m/s">
+                    <button type="button" class="reset" id="btn_reset" onclick="reset()">Rénisialiser Tableau</button>
+                    <span id="box_info"></span>
+            </div>
+            <div id="equipe-container"></div>
+        </div>
+        <div class="testflex">
+            <!-- <div  style="position: relative; height:50vh; width:100vw">
+                <canvas id="pref-load"></canvas>
+            </div> -->
+            <div style="display: flex; height:50vh; width:100vw">
+                <canvas id="Chart_TeamA"></canvas>
+                <button type="button" onclick="checkSettingsTeamA()" class="test">Valider</button>
+            </div>
+        </div>
+       <!-- <button type="button" onclick="location.reload()">testmgl</button> -->
+        
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/function/input.js"></script>
+    <script src="../js/function/addData.js"></script>
+    <script src="../js/script/app.js"></script>
+</body>
+</html>

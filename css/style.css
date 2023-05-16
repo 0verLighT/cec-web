@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    font-family: 'Secular One', sans-serif;
+    background-color: antiquewhite;
+    padding: 5px;
+}
+
+.input_data {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.flexA {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.table {
+    margin-top: -50px;
+    width: 50%;
+    padding: 2px;
+    border: 1px solid black;
+}
+.reset {
+    margin-top: 10px;
+    width: 50%;
+}
+
+.test {
+    display: flex;
+    
+    height: 10%;
+}
