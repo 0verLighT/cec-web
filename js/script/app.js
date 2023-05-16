@@ -2,6 +2,8 @@ const input_name_teamA = document.getElementById("Name_team");
 const span_name_teamA = document.getElementById("Name_team_span");
 const vitesse_teamA = document.getElementById("vitesse_teamA");
 const box_info = document.getElementById("box_info");
+const box_check = document.getElementById("box_info_check");
+const btn_check = document.getElementById("btn_check");
 
 let teamA = [
   {ms:0,s:0},
@@ -43,7 +45,8 @@ vitesse_teamA.addEventListener('keyup', (e) => {
             teamA.push(team);
             afficherEquipes();
             if (teamA.length === 7) {
-              createChart();  
+              createChart();
+              btn_check.style.visibility = "visible";
             }
             console.log(teamA);
             
@@ -124,7 +127,7 @@ function reset() {
 }
 
 function checkSettingsTeamA() {
-    if (teamA.length === 7) {
+    if (!teamA.length === 7) {
       setupBoxinfo("Le tableau n'est pas rempli, vous ne pouvez pas continuer");
       return;
     } 
@@ -137,8 +140,12 @@ function checkSettingsTeamA() {
   }
 }
 //setup de box info pour toutes erreures
-function setupBoxinfo(value) {
-  box_info.innerHTML = (value);
+/**
+ * Ajoute un message d'erreur dans la box_info
+ * @param {string} message 
+ */
+function setupBoxinfo(message) {
+  box_info.innerHTML = (message);
   box_info.style.color = "red";
     setTimeout(() => {
       box_info.innerHTML = ("");

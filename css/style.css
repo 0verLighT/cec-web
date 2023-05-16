@@ -26,11 +26,13 @@
 }
 .reset {
     margin-top: 10px;
+    justify-content: center;
     width: 50%;
 }
 
-.test {
-    display: flex;
-    
-    height: 10%;
+.btn-check {
+    visibility: hidden;
+    margin-top: 10px;
+    justify-content: center;
+    width: 50%;
 }
