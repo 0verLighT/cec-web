@@ -36,3 +36,20 @@
     justify-content: center;
     width: 50%;
 }
+.team_B {
+    display: none;
+    flex-direction: column;
+}
+
+.flexB {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+.btn-checkB {
+    visibility: hidden;
+    margin-top: 10px;
+    justify-content: center;
+    width: 50%;
+}
