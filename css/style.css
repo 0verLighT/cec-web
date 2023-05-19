@@ -3,6 +3,7 @@
     font-family: 'Secular One', sans-serif;
     background-color: rgb(231, 222, 210);
     padding: 5px;
+    overflow-x: hidden;
 }
 
 .input_data {
@@ -19,7 +20,7 @@
 }
 
 .table {
-    margin-top: -50px;
+    margin-top: -5px;
     width: 50%;
     padding: 2px;
     border: 1px solid black;

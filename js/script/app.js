@@ -149,14 +149,15 @@ function createChart() {
 }
 
 function resetA() {
+  if (teamA.length === 1) {
+    setupBoxinfo("Le tableau est déjà vide");
+    return;
+  }
   console.log("reset");
   let reset = [{ ms: 0, s: 0 }];
   teamA.splice(0, teamA.length, ...reset);
-  setupBoxinfo(
-    "Le graphique sera actualisé après avoir ajouté les nouvelles valeurs"
-  );
   graphiqueA.destroy();
-  
+  btn_checkA.style.visibility = "hidden";
   afficherEquipes();
 }
 
@@ -232,7 +233,7 @@ vitesse_teamB.addEventListener("keyup", (e) => {
           };
           vitesse_teamB.value = "";
           teamB.push(team2);
-          afficherEquipes("equipe-container-2");
+          afficherEquipes2();
           if (teamB.length === 7) {
             createChartB();
             btn_checkB.style.visibility = "visible";
@@ -247,7 +248,7 @@ vitesse_teamB.addEventListener("keyup", (e) => {
 
 function afficherEquipes2() {
   const container = document.getElementById("equipe-container-2");
-  const table = document.getElementById("equipe-table");
+  const table = container.querySelector("#equipe-table");
 
   // Supprimer le tableau existant s'il y en a un
   if (table) {
@@ -271,7 +272,7 @@ function afficherEquipes2() {
   newTable.appendChild(headerRow);
 
   // Ajouter une ligne pour chaque équipe et mettre les données en ligne
-  teamA.forEach((equipe) => {
+  teamB.forEach((equipe) => {
     const row = document.createElement("tr");
     Object.values(equipe).forEach((value) => {
       const cell = document.createElement("td");
@@ -338,13 +339,17 @@ function checkSettingsTeamB() {
     console.log(name_teamA);
   }
   section_teamB.style.display = "none";
-  // section_teamB.style.flexDirection = "row-reverse";
 }
 
 function resetB() {
-  console.log("reset");
+  if (teamB.length === 1) {
+    setupBoxinfo_2("Le tableau est déjà vide");
+    return;
+  }
+  console.log("reset mgl");
   let reset = [{ ms: 0, s: 0 }];
   teamB.splice(0, teamB.length, ...reset);
   graphiqueB.destroy();
-  // afficherEquipes();
+  btn_checkB.style.visibility = "hidden";
+  afficherEquipes2();
 }
