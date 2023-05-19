@@ -12,12 +12,16 @@ const btn_checkA = document.getElementById("btn_check");
 const btn_checkB = document.getElementById("btn_checkB");
 const section_teamA = document.getElementById("team_A");
 const section_teamB = document.getElementById("team_B");
+
 let graphiqueA;
 let graphiqueB;
+
 let teamA = [{ ms: 0, s: 0 }];
 let teamB = [{ ms: 0, s: 0 }];
+
 let name_teamA = "";
 let name_teamB = "";
+
 input_name_teamA.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     span_name_teamA.innerHTML = `(${input_name_teamA.value.trim()})`;
@@ -120,7 +124,7 @@ function createChart() {
       ],
       datasets: [
         {
-          label: "Vitesse",
+          label: "Courbe d'accélération",
           data: [
             teamA[0].ms,
             teamA[1].ms,
@@ -241,42 +245,42 @@ vitesse_teamB.addEventListener("keyup", (e) => {
 });
 
 
-// function afficherEquipes2() {
-//   const container = document.getElementById("equipe-container-2");
-//   const table = document.getElementById("equipe-table");
+function afficherEquipes2() {
+  const container = document.getElementById("equipe-container-2");
+  const table = document.getElementById("equipe-table");
 
-//   // Supprimer le tableau existant s'il y en a un
-//   if (table) {
-//     container.removeChild(table);
-//   }
+  // Supprimer le tableau existant s'il y en a un
+  if (table) {
+    container.removeChild(table);
+  }
 
-//   // Créer un nouveau tableau
-//   const newTable = document.createElement("table");
-//   newTable.setAttribute("id", "equipe-table");
-//   newTable.setAttribute("class", "table");
-//   container.appendChild(newTable);
+  // Créer un nouveau tableau
+  const newTable = document.createElement("table");
+  newTable.setAttribute("id", "equipe-table");
+  newTable.setAttribute("class", "table");
+  container.appendChild(newTable);
 
-//   // Créer une seule ligne d'en-tête pour les titres des colonnes
-//   const headerRow = document.createElement("tr");
-//   const headers = ["ms", "s"];
-//   headers.forEach((headerText) => {
-//     const th = document.createElement("th");
-//     th.textContent = headerText;
-//     headerRow.appendChild(th);
-//   });
-//   newTable.appendChild(headerRow);
+  // Créer une seule ligne d'en-tête pour les titres des colonnes
+  const headerRow = document.createElement("tr");
+  const headers = ["ms", "s"];
+  headers.forEach((headerText) => {
+    const th = document.createElement("th");
+    th.textContent = headerText;
+    headerRow.appendChild(th);
+  });
+  newTable.appendChild(headerRow);
 
-//   // Ajouter une ligne pour chaque équipe et mettre les données en ligne
-//   teamA.forEach((equipe) => {
-//     const row = document.createElement("tr");
-//     Object.values(equipe).forEach((value) => {
-//       const cell = document.createElement("td");
-//       cell.textContent = value;
-//       row.appendChild(cell);
-//     });
-//     newTable.appendChild(row);
-//   });
-// }
+  // Ajouter une ligne pour chaque équipe et mettre les données en ligne
+  teamA.forEach((equipe) => {
+    const row = document.createElement("tr");
+    Object.values(equipe).forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.appendChild(cell);
+    });
+    newTable.appendChild(row);
+  });
+}
 
 function createChartB() {
   const ctx = document.getElementById("Chart_TeamB");
