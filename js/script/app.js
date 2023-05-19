@@ -178,6 +178,7 @@ function checkSettingsTeamA() {
   }
   section_teamA.style.display = "none";
   section_teamB.style.display = "flex";
+  return name_teamA;
   // section_teamB.style.flexDirection = "row-reverse";
 }
 //setup de box info pour toutes erreures
@@ -333,12 +334,13 @@ function checkSettingsTeamB() {
     span_name_teamB.innerHTML === "" ||
     span_name_teamA.innerHTML === "()"
   ) {
-    name_teamA = "Equipe A";
+    name_teamB = "Equipe B";
   } else {
     name_teamA = span_name_teamA.innerHTML.replace("(", "").replace(")", "");
-    console.log(name_teamA);
+    console.log(name_teamB);
   }
   section_teamB.style.display = "none";
+  return name_teamB;
 }
 
 function resetB() {
@@ -352,4 +354,62 @@ function resetB() {
   graphiqueB.destroy();
   btn_checkB.style.visibility = "hidden";
   afficherEquipes2();
+}
+
+
+// calculs des résultats de distance et de temps de la team A 
+function calculsA() {
+  let distancefinal = 75;
+  let tempsfinalA = 0;
+  let distance = 0;
+  let distance_retante = 0;
+  let tempsextra = 0;
+
+  // Calcul de la distance parcourue par la team A
+  for (let i = 0; i < teamA.length - 1; i++) {
+    distance += 0.5 * (teamA[i].ms + teamA[i + 1].ms);
+  }
+
+  distance_retante = distancefinal - distance;
+  tempsextra = distance_retante / teamA[teamA.length - 1].ms;
+  tempsfinalA = teamA[teamA.length - 1].s + tempsextra;
+
+  console.log(`Le temps final est ${tempsfinalA} secondes`);
+  return tempsfinalA;
+}
+
+function calculsB() {
+  let distancefinal = 75;
+  let tempsfinalB = 0;
+  let distance = 0;
+  let distance_retante = 0;
+  let tempsextra = 0;
+
+  // Calcul de la distance parcourue par la team A
+  for (let i = 0; i < teamB.length - 1; i++) {
+    distance += 0.5 * (teamB[i].ms + teamB[i + 1].ms);
+  }
+
+  distance_retante = distancefinal - distance;
+  tempsextra = distance_retante / teamA[teamB.length - 1].ms;
+  tempsfinalB = teamB[teamB.length - 1].s + tempsextra;
+
+  console.log(`Le temps final est ${tempsfinalB} secondes`);
+  return tempsfinalB;
+}
+
+function win() {
+  let name_teamA = checkSettingsTeamA();
+  let name_teamB = checkSettingsTeamB();
+  let teampsfinalA = calculsA();
+  let teampsfinalB = calculsB();
+  if (teampsfinalA < teampsfinalB) {
+    console.log(`${name_teamA} gagne`);
+  } else if (teampsfinalA === teampsfinalB) {
+    console.log(`égalité entre ${name_teamA} et ${name_teamB} avec ${teampsfinalA} secondes`);
+  } else {
+    console.log(`${name_teamB} gagne`);
+  }
+  console.log(name_teamA);
+  console.log(name_teamB);
 }
