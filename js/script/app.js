@@ -153,10 +153,12 @@ function resetA() {
     setupBoxinfo("Le tableau est déjà vide");
     return;
   }
-  console.log("reset");
+  if (graphiqueA) {
+    graphiqueA.destroy();
+  }
+  console.log("reset value team A");
   let reset = [{ ms: 0, s: 0 }];
   teamA.splice(0, teamA.length, ...reset);
-  graphiqueA.destroy();
   btn_checkA.style.visibility = "hidden";
   afficherEquipes();
 }
@@ -348,10 +350,12 @@ function resetB() {
     setupBoxinfo_2("Le tableau est déjà vide");
     return;
   }
-  console.log("reset mgl");
+  if (graphiqueB) {
+    graphiqueB.destroy();
+  }
+  console.log("reset value team B");
   let reset = [{ ms: 0, s: 0 }];
   teamB.splice(0, teamB.length, ...reset);
-  graphiqueB.destroy();
   btn_checkB.style.visibility = "hidden";
   afficherEquipes2();
 }
