@@ -60,6 +60,7 @@ vitesse_teamA.addEventListener("keyup", (e) => {
           if (teamA.length === 7) {
             createChart();
             btn_checkA.style.visibility = "visible";
+            checklastvalueA();
           }
           console.log(teamA);
         }
@@ -67,6 +68,17 @@ vitesse_teamA.addEventListener("keyup", (e) => {
     }
   }
 });
+function checklastvalueA() {
+  //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
+  if (teamA[teamA.length - 1].ms === 0) {
+    teamA.pop();
+    setupBoxinfo("La dernière valeur est 0 veuillez saisir une nouvelle valeur");
+    afficherEquipes();
+    graphiqueA.destroy();
+    btn_checkA.style.visibility = "hidden";
+    return;
+  }
+}
 /**
  * crée un tableau dans le DOM et l'ajoute à la page
  */
@@ -240,6 +252,7 @@ vitesse_teamB.addEventListener("keyup", (e) => {
           if (teamB.length === 7) {
             createChartB();
             btn_checkB.style.visibility = "visible";
+            checklastvalueB();
           }
           console.log(teamB);
         }
@@ -252,18 +265,18 @@ vitesse_teamB.addEventListener("keyup", (e) => {
 function afficherEquipes2() {
   const container = document.getElementById("equipe-container-2");
   const table = container.querySelector("#equipe-table");
-
+  
   // Supprimer le tableau existant s'il y en a un
   if (table) {
     container.removeChild(table);
   }
-
+  
   // Créer un nouveau tableau
   const newTable = document.createElement("table");
   newTable.setAttribute("id", "equipe-table");
   newTable.setAttribute("class", "table");
   container.appendChild(newTable);
-
+  
   // Créer une seule ligne d'en-tête pour les titres des colonnes
   const headerRow = document.createElement("tr");
   const headers = ["ms", "s"];
@@ -273,7 +286,7 @@ function afficherEquipes2() {
     headerRow.appendChild(th);
   });
   newTable.appendChild(headerRow);
-
+  
   // Ajouter une ligne pour chaque équipe et mettre les données en ligne
   teamB.forEach((equipe) => {
     const row = document.createElement("tr");
@@ -286,6 +299,17 @@ function afficherEquipes2() {
   });
 }
 
+function checklastvalueB() {
+  //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
+  if (teamB[teamB.length - 1].ms === 0) {
+    teamB.pop();
+    setupBoxinfo_2("La dernière valeur est 0 veuillez saisir une nouvelle valeur");
+    afficherEquipes2();
+    graphiqueB.destroy();
+    btn_checkB.style.visibility = "hidden";
+    return;
+  }
+}
 function createChartB() {
   const ctx = document.getElementById("Chart_TeamB");
 
