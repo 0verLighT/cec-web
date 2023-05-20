@@ -211,7 +211,7 @@ function setupBoxinfo_2(message) {
   box_infoB.innerHTML = message;
   box_infoB.style.color = "red";
   setTimeout(() => {
-    box_info.innerHTML = "";
+    box_infoB.innerHTML = "";
   }, 5000);
 }
 input_name_teamB.addEventListener("keyup", (e) => { 
