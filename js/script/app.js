@@ -1,3 +1,4 @@
+//définition des éléments du DOM
 const input_name_teamA = document.getElementById("Name_team");
 const input_name_teamB = document.getElementById("Name_teamB");
 const span_name_teamA = document.getElementById("Name_team_span");
@@ -12,16 +13,16 @@ const btn_checkA = document.getElementById("btn_check");
 const btn_checkB = document.getElementById("btn_checkB");
 const section_teamA = document.getElementById("team_A");
 const section_teamB = document.getElementById("team_B");
-
+//défini variable sans type
 let graphiqueA;
 let graphiqueB;
-
+// défini obejct 
 let teamA = [{ ms: 0, s: 0 }];
 let teamB = [{ ms: 0, s: 0 }];
-
+// défini nom des équipe
 let name_teamA = "";
 let name_teamB = "";
-
+//event listenner pour le nom de l'équipe et l'afficher dans le DOM
 input_name_teamA.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     span_name_teamA.innerHTML = `(${input_name_teamA.value.trim()})`;
@@ -31,20 +32,25 @@ input_name_teamA.addEventListener("keydown", (e) => {
     span_name_teamA.innerHTML = "";
   }
 });
-
+// Input de l'obejct team A avec un event listenner
 vitesse_teamA.addEventListener("keyup", (e) => {
+  // condition la touche perser doit êter "Enter"
   if (e.key === "Enter") {
+    //condition de message d'erreur 
     if (teamA.length === 7) {
       setupBoxinfo("Le tableau est déjà rempli");
       return; // Si le tableau est égale a 7, le rendre disabled
     } else {
+      // d'accepte pas la valeur qui ne sont pas des nombres
       if (isNaN(parseFloat(vitesse_teamA.value))) {
         setupBoxinfo("Ce n'est pas un nombre");
         return; // Si le champs n'est pas un nombre, met par la suite un message d'erreur
       } else {
+        //erreur si rien 
         if (!vitesse_teamA.value === "") {
           setupBoxinfo("Le champ est vide");
           return; // Si le champs est vide, met par le suite un message d'erreur
+          // la valeur doit être compris entre 0 et 12 
         } else if (vitesse_teamA.value < 0 || vitesse_teamA.value > 12) {
           setupBoxinfo("Le nombre est inférieur à 0 ou supérieur à 12");
           return; //si le champ est un nombre inférieur a 0 ou supérieur a 12, met par le suite un message d'erreur
@@ -491,3 +497,25 @@ function checkallvalueare12B(arr) {
   }
   return arr.slice(1).every((item) => item.ms === 12);
 }
+
+function pushJson() {
+  let tempsfinalA = calculsA();
+  let tempsfinalB = calculsB();
+  let data =[ 
+    {
+      "name" : name_teamA,
+      "result" : tempsfinalA
+    },
+    {
+      "name" : name_teamB,
+      "result" : tempsfinalB
+    }
+  ]
+  fetch("http://91.163.145.45:2015/append_data", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+        "Content-Type": "application/json"
+    },
+});
+};
