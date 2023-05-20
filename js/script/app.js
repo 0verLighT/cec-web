@@ -60,7 +60,18 @@ vitesse_teamA.addEventListener("keyup", (e) => {
           if (teamA.length === 7) {
             createChart();
             btn_checkA.style.visibility = "visible";
+            checkallvaluearezerosA(teamA);
+            console.log(checkallvaluearezerosA(teamA) === true);
+            if (checkallvaluearezerosA(teamA) === true) {
+              setupBoxinfo("Faudrait peut-être accélérer un peu non ?");
+              return;
+            } else  if(checkallvalueare12A(teamA) === true){
+              setupBoxinfo("Tu t'es cru pour une fusée ?");
+              return;
+            } else{
             checklastvalueA();
+            }
+            
           }
           console.log(teamA);
         }
@@ -252,7 +263,16 @@ vitesse_teamB.addEventListener("keyup", (e) => {
           if (teamB.length === 7) {
             createChartB();
             btn_checkB.style.visibility = "visible";
+            if (checkallvaluearezerosB(teamB) === true) {
+              setupBoxinfo_2("Faudrait peut-être accélérer un peu non ?");
+              return;
+            } else  if(checkallvalueare12B(teamB) === true){
+              setupBoxinfo_2("Tu t'es cru pour une fusée ?");
+              return;
+            } else{
             checklastvalueB();
+            }
+            
           }
           console.log(teamB);
         }
@@ -440,4 +460,34 @@ function win() {
   }
   console.log(name_teamA);
   console.log(name_teamB);
+}
+
+function checkallvaluearezerosA(arr) {
+  if (arr.every((item) => item.ms === 0)) {
+    btn_checkA.style.visibility = "hidden";
+    resetA();
+  }
+  return arr.every((item) => item.ms === 0);
+}
+function checkallvalueare12A(arr) {
+  if (arr.slice(1).every((item) => item.ms === 12)) {
+    btn_checkB.style.visibility = "hidden";
+    resetA();
+  }
+  return arr.slice(1).every((item) => item.ms === 12);
+}
+
+function checkallvaluearezerosB(arr) {
+  if (arr.every((item) => item.ms === 0)) {
+    btn_checkB.style.visibility = "hidden";
+    resetB();
+  }
+  return arr.every((item) => item.ms === 0);
+}
+function checkallvalueare12B(arr) {
+  if (arr.slice(1).every((item) => item.ms === 12)) {
+    btn_checkB.style.visibility = "hidden";
+    resetB();
+  }
+  return arr.slice(1).every((item) => item.ms === 12);
 }
