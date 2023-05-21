@@ -9,514 +9,256 @@ const box_infoA = document.getElementById("box_info");
 const box_infoB = document.getElementById("box_infoB");
 const box_checkA = document.getElementById("box_info_check");
 const box_checkB = document.getElementById("box_info_checkB");
-const btn_checkA = document.getElementById("btn_check");
+const btn_checkA = document.getElementById("btn_checkA");
 const btn_checkB = document.getElementById("btn_checkB");
 const section_teamA = document.getElementById("team_A");
 const section_teamB = document.getElementById("team_B");
-//défini variable sans type
-let graphiqueA;
-let graphiqueB;
-// défini obejct 
 let teamA = [{ ms: 0, s: 0 }];
 let teamB = [{ ms: 0, s: 0 }];
-
-// défini nom des équipe
-let name_teamA = "";
-let name_teamB = "";
-//event listenner pour le nom de l'équipe et l'afficher dans le DOM
 input_name_teamA.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    span_name_teamA.innerHTML = `(${input_name_teamA.value.trim()})`;
-    name_teamA = input_name_teamA.value.trim();
-  }
-  if (e.key === "Backspace") {
-    span_name_teamA.innerHTML = "";
-  }
+    if (e.key === "Enter") {nameTeam(input_name_teamA, span_name_teamA, "Équipe A");}
+    if (e.key === "Backspace") {nameTeam( input_name_teamA,span_name_teamA, "Équipe A");}
 });
-// Input de l'obejct team A avec un event listenner
-vitesse_teamA.addEventListener("keyup", (e) => {
-  // condition la touche perser doit êter "Enter"
-  if (e.key === "Enter") {
-    //condition de message d'erreur 
-    if (teamA.length === 7) {
-      setupBoxinfo("Le tableau est déjà rempli");
-      return; // Si le tableau est égale a 7, le rendre disabled
+input_name_teamB.addEventListener("keyup", (e) => { 
+  if (e.key === "Enter") {nameTeam(input_name_teamB, span_name_teamB, "Équipe B");}
+  if (e.key === "Backspace") {nameTeam(input_name_teamB,span_name_teamB , "Équipe B");}
+});
+//lancer quand c'est entrer dans l'input et le bouton valider
+function nameTeam(elementInput, elementSpan, team) {
+  let teamName = "";
+  elementInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        elementSpan.textContent = `(${elementInput.value.trim()})`;
+        teamName = elementInput.value.trim();
+    }
+    if (e.key === "Backspace") {
+        elementSpan.innerHTML = "";
+    }
+    if (elementSpan == null ||elementSpan.textContent === "" ||elementSpan.textContent === "()") {
+      teamName = team;
     } else {
-      // d'accepte pas la valeur qui ne sont pas des nombres
-      if (isNaN(parseFloat(vitesse_teamA.value))) {
-        setupBoxinfo("Ce n'est pas un nombre");
-        return; // Si le champs n'est pas un nombre, met par la suite un message d'erreur
-      } else {
-        //erreur si rien 
-        if (!vitesse_teamA.value === "") {
-          setupBoxinfo("Le champ est vide");
-          return; // Si le champs est vide, met par le suite un message d'erreur
-          // la valeur doit être compris entre 0 et 12 
-        } else if (vitesse_teamA.value < 0 || vitesse_teamA.value > 12) {
-          setupBoxinfo("Le nombre est inférieur à 0 ou supérieur à 12");
-          return; //si le champ est un nombre inférieur a 0 ou supérieur a 12, met par le suite un message d'erreur
-        } else {
-          let s = parseInt(teamA.length);
-          let team = {
-            ms: parseFloat(vitesse_teamA.value),
-            s: s++,
-          };
-          vitesse_teamA.value = "";
-          teamA.push(team);
-          afficherEquipes();
-          if (teamA.length === 7) {
-            createChart();
-            btn_checkA.style.visibility = "visible";
-            checkallvaluearezerosA(teamA);
-            console.log(checkallvaluearezerosA(teamA) === true);
-            if (checkallvaluearezerosA(teamA) === true) {
-              setupBoxinfo("Faudrait peut-être accélérer un peu non ?");
-              return;
-            } else  if(checkallvalueare12A(teamA) === true){
-              setupBoxinfo("Tu t'es cru pour une fusée ?");
-              return;
-            } else{
-            checklastvalueA();
-            }
-            
-          }
-          console.log(teamA);
+      teamName = elementSpan.textContent.replace("(", "").replace(")", "");
+      console.log(teamName);
+    }
+    return teamName;
+});
+};
+vitesse_teamA.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA)}
+});
+vitesse_teamB.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB)}
+});
+function append_data(team, vistesse, btn_check) {
+  let graphique = "";
+  if(team == teamA) {
+    graphique = "graphiqueA";
+  } else {
+    graphique = "graphiqueB";
+  };
+   if (team.length === 7) {
+    setupBoxinfo("Le tableau est déjà rempli", "red", box_infoA);
+    return; 
+  } else if (!(isNaN(parseFloat(vistesse.value)))){
+    if (!(vistesse.value < 0 || vistesse.value > 12)) {
+      let s = parseInt(team.length);
+      let teamValue = {
+        ms: parseFloat(vistesse.value),
+        s: s++,
+      };
+      vistesse.value = "";
+      team.push(teamValue);
+      if(team.length === 7) {
+        createChart(team, graphique, "Chart_teamA");
+        btn_check.style.display = "visible";
+        if (checkallvaluearezeros(team) === true) {
+          checkallvaluearezeros(team, btn_check, graphique);
+          return setupBoxinfo("Faudrait peut-être accélérer un peu non ?", "red", box_checkA);
+        } else if (checkallvalueare12(team) === true) {
+          checkallvalueare12(team, btn_check, graphique);
+          return setupBoxinfo("Faudrait peut-être ralentir un peu non ?", "red", box_checkA);
+        } else{
+          checklastvalue(team, btn_checkA);
         }
       }
-    }
-  }
-});
-function checklastvalueA() {
-  //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
-  if (teamA[teamA.length - 1].ms === 0) {
-    teamA.pop();
-    setupBoxinfo("La dernière valeur est 0 veuillez saisir une nouvelle valeur");
-    afficherEquipes();
-    graphiqueA.destroy();
-    btn_checkA.style.visibility = "hidden";
-    return;
-  }
-}
-/**
- * crée un tableau dans le DOM et l'ajoute à la page
- */
-function afficherEquipes() {
-  const container = document.getElementById("equipe-container-1");
-  const table = document.getElementById("equipe-table");
-
-  // Supprimer le tableau existant s'il y en a un
-  if (table) {
-    container.removeChild(table);
-  }
-
-  // Créer un nouveau tableau
-  const newTable = document.createElement("table");
-  newTable.setAttribute("id", "equipe-table");
-  newTable.setAttribute("class", "table");
-  container.appendChild(newTable);
-
-  // Créer une seule ligne d'en-tête pour les titres des colonnes
-  const headerRow = document.createElement("tr");
-  const headers = ["ms", "s"];
-  headers.forEach((headerText) => {
-    const th = document.createElement("th");
-    th.textContent = headerText;
-    headerRow.appendChild(th);
-  });
-  newTable.appendChild(headerRow);
-
-  // Ajouter une ligne pour chaque équipe et mettre les données en ligne
-  teamA.forEach((equipe) => {
-    const row = document.createElement("tr");
-    Object.values(equipe).forEach((value) => {
-      const cell = document.createElement("td");
-      cell.textContent = value;
-      row.appendChild(cell);
-    });
-    newTable.appendChild(row);
-  });
-}
-
-function createChart() {
-  const ctx = document.getElementById("Chart_TeamA");
-
-  graphiqueA = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: [
-        teamA[0].s,
-        teamA[1].s,
-        teamA[2].s,
-        teamA[3].s,
-        teamA[4].s,
-        teamA[5].s,
-        teamA[6].s,
-      ],
-      datasets: [
-        {
-          label: "Courbe d'accélération",
-          data: [
-            teamA[0].ms,
-            teamA[1].ms,
-            teamA[2].ms,
-            teamA[3].ms,
-            teamA[4].ms,
-            teamA[5].ms,
-            teamA[6].ms,
-          ],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-}
-
-function resetA() {
-  if (teamA.length === 1) {
-    setupBoxinfo("Le tableau est déjà vide");
-    return;
-  }
-  if (graphiqueA) {
-    graphiqueA.destroy();
-  }
-  console.log("reset value team A");
-  let reset = [{ ms: 0, s: 0 }];
-  teamA.splice(0, teamA.length, ...reset);
-  btn_checkA.style.visibility = "hidden";
-  afficherEquipes();
-}
-
-function checkSettingsTeamA() {
-  if (!teamA.length === 7) {
-    setupBoxinfo("Le tableau n'est pas rempli, vous ne pouvez pas continuer");
-    return;
-  }
-  if (
-    span_name_teamA == null ||
-    span_name_teamA.innerHTML === "" ||
-    span_name_teamA.innerHTML === "()"
-  ) {
-    name_teamA = "Equipe A";
+    } else { 
+    return setupBoxinfo("Le nombre est inférieur à 0 ou supérieur à 12", "red", box_infoA);
+    };
   } else {
-    name_teamA = span_name_teamA.innerHTML.replace("(", "").replace(")", "");
-    console.log(name_teamA);
+  return setupBoxinfo("Ce n'est pas un nombre", "red", box_infoA);
+  }; 
+};
+function checklastvalue(team, btn_check, graphique) {
+    //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
+    if (team[team.length - 1].ms === 0) {
+        team.pop();
+        setupBoxinfo("La dernière valeur est 0 veuillez saisir une nouvelle valeur", "red", box_infoA);
+        afficherEquipes();
+        graphique.destroy();
+        btn_check.style.visibility = "hidden";
+        return console.log("la derniere valeur est 0");
+  };
+};
+/**
+ * 
+ * @param {Array} team 
+ * @param {string} graphique 
+ * @param {Element} btn_check 
+ * @returns 
+ */
+function reset(team, graphique, btn_check) {
+    if (team.length === 1) {
+      return setupBoxinfo("Le tableau est déjà vide", "red", box_infoA);
+    };
+  //mettre des paramtère et la function de createion de chart 
+  if (graphique) {
+    graphique.destroy();
   }
-  section_teamA.style.display = "none";
-  section_teamB.style.display = "flex";
-  return name_teamA;
-  // section_teamB.style.flexDirection = "row-reverse";
+  console.log(`reset value team ${team}`);
+  let reset = [{ ms: 0, s: 0 }];
+  team.splice(0, team.length, ...reset);
+  btn_check.style.visibility = "hidden";
+  afficherEquipes();
+};
+/**
+ * 
+ * @param {Element} section_actuelle 
+ * @param {Element} section_suivante 
+ * @param {Element} input_name_teamA
+ * @param {Element} span_name_teamA
+ * @param {string} name_defaut
+ * @returns 
+ */
+function checkSettingsTeam(section_actuelle, section_suivante, input_name_teamA, span_name_teamA, name_defaut) {
+  section_actuelle.style.display = "none";
+  section_suivante.style.display = "flex";
+  nameTeam(input_name_teamA, span_name_teamA, name_defaut);
+  return ;
 }
-//setup de box info pour toutes erreures
 /**
  * Ajoute un message d'erreur dans la box_info
  * @param {string} message
+ * @param {string} color
+ * @param {Element} box_info
  */
-function setupBoxinfo(message) {
-  box_infoA.innerHTML = message;
-  box_infoA.style.color = "red";
+function setupBoxinfo(message, color , box_info) {
+  box_info.textContent = message;
+  box_info.style.color = color;
   setTimeout(() => {
-    box_infoA.innerHTML = "";
+    box_info.textContent = "";
   }, 5000);
 }
-function setupBoxinfo_2(message) {
-  box_infoB.innerHTML = message;
-  box_infoB.style.color = "red";
-  setTimeout(() => {
-    box_infoB.innerHTML = "";
-  }, 5000);
-}
-input_name_teamB.addEventListener("keyup", (e) => { 
-  if (e.key === "Enter") {
-    span_name_teamB.innerHTML = `( ${input_name_teamB.value.trim()} )`;
-    name_teamB = input_name_teamB.value.trim();
-  }
-  if (e.key === "Backspace") {
-    span_name_teamB.innerHTML = "";
-  }
-});
-
-vitesse_teamB.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {
-    if (teamB.length === 7) {
-      setupBoxinfo_2("Le tableau est déjà rempli");
-      return; // Si le tableau est égale a 7, le rendre disabled
-    } else {
-      if (isNaN(parseFloat(vitesse_teamB.value))) {
-        setupBoxinfo_2("Ce n'est pas un nombre");
-        return; // Si le champs n'est pas un nombre, met par la suite un message d'erreur
-      } else {
-        if (!vitesse_teamB.value === "") {
-          setupBoxinfo_2("Le champ est vide");
-          return; // Si le champs est vide, met par le suite un message d'erreur
-        } else if (vitesse_teamB.value < 0 || vitesse_teamB.value > 12) {
-          setupBoxinfo_2("Le nombre est inférieur à 0 ou supérieur à 12");
-          return; //si le champ est un nombre inférieur a 0 ou supérieur a 12, met par le suite un message d'erreur
-        } else {
-          let s = parseInt(teamB.length);
-          let team2 = {
-            ms: parseFloat(vitesse_teamB.value),
-            s: s++,
-          };
-          vitesse_teamB.value = "";
-          teamB.push(team2);
-          afficherEquipes2();
-          if (teamB.length === 7) {
-            createChartB();
-            btn_checkB.style.visibility = "visible";
-            if (checkallvaluearezerosB(teamB) === true) {
-              setupBoxinfo_2("Faudrait peut-être accélérer un peu non ?");
-              return;
-            } else  if(checkallvalueare12B(teamB) === true){
-              setupBoxinfo_2("Tu t'es cru pour une fusée ?");
-              return;
-            } else{
-            checklastvalueB();
-            }
-            
-          }
-          console.log(teamB);
-        }
-      }
-    }
-  }
-});
-
-
-function afficherEquipes2() {
-  const container = document.getElementById("equipe-container-2");
-  const table = container.querySelector("#equipe-table");
-  
-  // Supprimer le tableau existant s'il y en a un
+/**
+ * crée un tableau dans le DOM et l'ajoute à la page
+ * @param {Array} team
+ * @param {string} elementTable
+ * @returns
+*/
+function afficherEquipes(team, elementTable) {
+  const container = document.getElementById(elementTable);
+  const table = document.getElementById("equipe-table");
   if (table) {
-    container.removeChild(table);
+      container.removeChild(table);
   }
-  
-  // Créer un nouveau tableau
   const newTable = document.createElement("table");
   newTable.setAttribute("id", "equipe-table");
   newTable.setAttribute("class", "table");
   container.appendChild(newTable);
-  
-  // Créer une seule ligne d'en-tête pour les titres des colonnes
   const headerRow = document.createElement("tr");
   const headers = ["ms", "s"];
   headers.forEach((headerText) => {
-    const th = document.createElement("th");
-    th.textContent = headerText;
-    headerRow.appendChild(th);
+      const th = document.createElement("th");
+      th.textContent = headerText;
+      headerRow.appendChild(th);
   });
   newTable.appendChild(headerRow);
-  
-  // Ajouter une ligne pour chaque équipe et mettre les données en ligne
-  teamB.forEach((equipe) => {
-    const row = document.createElement("tr");
-    Object.values(equipe).forEach((value) => {
-      const cell = document.createElement("td");
-      cell.textContent = value;
-      row.appendChild(cell);
-    });
-    newTable.appendChild(row);
+  team.forEach((equipe) => {
+      const row = document.createElement("tr");
+      Object.values(equipe).forEach((value) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+      });
+      newTable.appendChild(row);
   });
-}
-
-function checklastvalueB() {
-  //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
-  if (teamB[teamB.length - 1].ms === 0) {
-    teamB.pop();
-    setupBoxinfo_2("La dernière valeur est 0 veuillez saisir une nouvelle valeur");
-    afficherEquipes2();
-    graphiqueB.destroy();
-    btn_checkB.style.visibility = "hidden";
-    return;
-  }
-}
-function createChartB() {
-  const ctx = document.getElementById("Chart_TeamB");
-
-   graphiqueB =  new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: [
-        teamB[0].s,
-        teamB[1].s,
-        teamB[2].s,
-        teamB[3].s,
-        teamB[4].s,
-        teamB[5].s,
-        teamB[6].s,
-      ],
-      datasets: [
-        {
-          label: "Vitesse",
-          data: [
-            teamB[0].ms,
-            teamB[1].ms,
-            teamB[2].ms,
-            teamB[3].ms,
-            teamB[4].ms,
-            teamB[5].ms,
-            teamB[6].ms,
+};
+function createChart( team, graphique , elementCanvas) {
+  let name_graph = graphique;
+  const ctx = document.getElementById(elementCanvas).getcontext("2d");
+    name_graph = new Chart(ctx, {
+      type: "line",
+      data: {
+          labels: [team[0].s,team[1].s,team[2].s,team[3].s,team[4].s,team[5].s,team[6].s],
+          datasets: [
+              {
+                  label: "Courbe d'accélération",
+                  data: [team[0].ms,team[1].ms,team[2].ms,team[3].ms,team[4].ms,team[5].ms,team[6].ms],
+                  borderWidth: 1,
+              },
           ],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
+      },
+      options: {
+        scales: {
+          y: {
+              beginAtZero: true,
+          },
       },
     },
   });
-}
-function checkSettingsTeamB() {
-  if (!teamB.length === 7) {
-    setupBoxinfo("Le tableau n'est pas rempli, vous ne pouvez pas continuer");
-    return;
-  }
-  if (
-    span_name_teamB == null ||
-    span_name_teamB.innerHTML === "" ||
-    span_name_teamA.innerHTML === "()"
-  ) {
-    name_teamB = "Equipe B";
-  } else {
-    name_teamA = span_name_teamA.innerHTML.replace("(", "").replace(")", "");
-    console.log(name_teamB);
-  }
-  section_teamB.style.display = "none";
-  return name_teamB;
-}
-
-function resetB() {
-  if (teamB.length === 1) {
-    setupBoxinfo_2("Le tableau est déjà vide");
-    return;
-  }
-  if (graphiqueB) {
-    graphiqueB.destroy();
-  }
-  console.log("reset value team B");
-  let reset = [{ ms: 0, s: 0 }];
-  teamB.splice(0, teamB.length, ...reset);
-  btn_checkB.style.visibility = "hidden";
-  afficherEquipes2();
-}
-
-
-// calculs des résultats de distance et de temps de la team A 
-function calculsA() {
-  let tempsfinalenplus = patinage(teamA);
-  let distancefinal = 75;
-  let tempsfinalA = 0;
-  let distance = 0;
-  let distance_retante = 0;
-  let tempsextra = 0;
-  let vitesseMoyenne = 0;
-
-  // Calcul de la distance parcourue par la team A
-  for (let i = 0; i < teamA.length - 1; i++) {
-    distance += 0.5 * (teamA[i].ms + teamA[i + 1].ms);
-  }
-
-  distance_retante = distancefinal - distance;
-  tempsextra = distance_retante / teamA[teamA.length - 1].ms;
-  tempsfinalA = teamA[teamA.length - 1].s + tempsextra;
-  tempsfinalA += tempsfinalenplus;
-  tempsfinalA = tempsfinalA.toFixed(3);
-  vitesseMoyenne = (distance / tempsfinalA).toFixed(3);
-  console.log(`Le temps final est ${tempsfinalA} secondes`);
-  return { tempsfinalA, vitesseMoyenne};
 };
 
-function calculsB() {
-  let tempsfinalenplus = patinage(teamB);
+function calculs(team) {
+  let tempsfinalenplus = patinage(team);
   let distancefinal = 75;
-  let tempsfinalB = 0;
+  let tempsfinal = 0;
   let distance = 0;
   let distance_retante = 0;
   let tempsextra = 0;
   let vitesseMoyenne = 0;
-
-  // Calcul de la distance parcourue par la team A
-  for (let i = 0; i < teamB.length - 1; i++) {
-    distance += 0.5 * (teamB[i].ms + teamB[i + 1].ms);
+  for (let i = 0; i < team.length - 1; i++) {
+    distance += 0.5 * (team[i].ms + team[i + 1].ms);
   }
-
   distance_retante = distancefinal - distance;
-  tempsextra = distance_retante / teamA[teamB.length - 1].ms;
-  tempsfinalB = teamB[teamB.length - 1].s + tempsextra;
-  tempsfinalB += tempsfinalenplus;
-  tempsfinalB = tempsfinalB.toFixed(3);
-  vitesseMoyenne = (distance / tempsfinalB).toFixed(3);
-  console.log(`Le temps final est ${tempsfinalB} secondes`);
-  return {tempsfinalB , vitesseMoyenne};
-}
+  tempsextra = distance_retante / team[team.length - 1].ms;
+  tempsfinal = (team[team.length - 1].s + tempsextra + tempsfinalenplus).toFixed(3);
+  vitesseMoyenne = (distance / tempsfinal).toFixed(3);
+  console.log(`Le temps final est ${tempsfinal} secondes`);
+  return { tempsfinal, vitesseMoyenne};
+};
 
 function win() {
-  let name_teamA = checkSettingsTeamA();
-  let name_teamB = checkSettingsTeamB();
-  let teampsfinalA = calculsA()["tempsfinalA"];
-  let teampsfinalB = calculsB()["tempsfinalB"];
-  if (teampsfinalA < teampsfinalB) {
-    console.log(`${name_teamA} gagne`);
-  } else if (teampsfinalA === teampsfinalB) {
-    console.log(`égalité entre ${name_teamA} et ${name_teamB} avec ${teampsfinalA} secondes`);
+  if (calculs(teamA)["tempsfinal"] < calculs(teamB)["tempsfinal"]) {
+    console.log(`${nameTeam(teamA)} gagne`);
+  } else if (calculs(teamA)["tempsfinal"] === calculs(teamB)["tempsfinal"]) {
+    console.log(`égalité entre ${nameTeam(teamA)} et ${nameTeam(teamB)} avec ${calculs()["tempsfinal"]} secondes`);
   } else {
-    console.log(`${name_teamB} gagne`);
-  }
-  console.log(name_teamA);
-  console.log(name_teamB);
-}
-
-function checkallvaluearezerosA(arr) {
+    console.log(`${nameTeam(teamB)} gagne`);
+  };
+};
+function checkallvaluearezeros(arr, btn_check, graphique) {
   if (arr.every((item) => item.ms === 0)) {
-    btn_checkA.style.visibility = "hidden";
-    resetA();
+    btn_check.style.visibility = "hidden";
+    reset(arr, btn_check, graphique);
   }
   return arr.every((item) => item.ms === 0);
-}
-function checkallvalueare12A(arr) {
+};
+function checkallvalueare12(arr, btn_check, graphique) {
   if (arr.slice(1).every((item) => item.ms === 12)) {
-    btn_checkB.style.visibility = "hidden";
-    resetA();
+    btn_check.style.visibility = "hidden";
+    reset(arr, btn_check, graphique);
   }
   return arr.slice(1).every((item) => item.ms === 12);
-}
-
-function checkallvaluearezerosB(arr) {
-  if (arr.every((item) => item.ms === 0)) {
-    btn_checkB.style.visibility = "hidden";
-    resetB();
-  }
-  return arr.every((item) => item.ms === 0);
-}
-function checkallvalueare12B(arr) {
-  if (arr.slice(1).every((item) => item.ms === 12)) {
-    btn_checkB.style.visibility = "hidden";
-    resetB();
-  }
-  return arr.slice(1).every((item) => item.ms === 12);
-}
-
+};
 function pushJson() {
   let data =[ 
     {
       "name" : name_teamA,
-      "result" : calculsA()["tempsfinalA"],
+      "result" : calculsA()["tempsfinal"],
       "vitesse" : calculsA()["vitesseMoyenne"]
     },
     {
       "name" : name_teamB,
-      "result" : calculsA()["tempsfinalB"],
+      "result" : calculsA()["tempsfinal"],
       "vitesse" : calculsB()["vitesseMoyenne"]
     }
   ]
@@ -534,13 +276,13 @@ function pushJson() {
  * @returns 
  */
 function patinage(team) {
-  const maxcourbe = [{ ms: 0, s: 0 }, { ms: 6, s: 1 }, { ms: 9, s: 2 }, { ms: 10.5, s: 3 }, { ms: 11.5, s: 4 }, { ms: 12, s: 5 }, { ms: 12, s: 6 }];
+  const _0x58c4x2 = [0,6,9,10.5,11.5,12,12,];
   let timeadd = [];
   let tempsfinalenplus = 0;
   const add = timeadd => timeadd.reduce((a, b) => a + b, 0);
   for (let i = 0; i < team.length; i++) {
-    if (team[i].ms > maxcourbe[i].ms) {
-      let timeaddpoint = parseFloat(team[i].ms / maxcourbe[i].ms - 1)*1.35+0.1*(team[i].ms - maxcourbe[i].ms)*(team[i].ms-maxcourbe[i].ms);
+    if (team[i].ms > _0x58c4x2[i].ms) {
+      let timeaddpoint = parseFloat(team[i]/ _0x58c4x2[i] - 1)*1.35+0.1*(team[i].ms - _0x58c4x2[i])*(team[i].ms-_0x58c4x2[i]);
       timeadd.push(timeaddpoint);
     } else {
       timeadd.push(timeaddpoint = 0);
