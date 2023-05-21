@@ -432,7 +432,7 @@ function calculsA() {
   tempsfinalA = teamA[teamA.length - 1].s + tempsextra;
   tempsfinalA += tempsfinalenplus;
   tempsfinalA = tempsfinalA.toFixed(3);
-  vitesseMoyenne = (distance / tempsfinalA).toFixed(2);
+  vitesseMoyenne = (distance / tempsfinalA).toFixed(3);
   console.log(`Le temps final est ${tempsfinalA} secondes`);
   return { tempsfinalA, vitesseMoyenne};
 };
@@ -456,7 +456,7 @@ function calculsB() {
   tempsfinalB = teamB[teamB.length - 1].s + tempsextra;
   tempsfinalB += tempsfinalenplus;
   tempsfinalB = tempsfinalB.toFixed(3);
-  vitesseMoyenne = (distance / tempsfinalB).toFixed(2);
+  vitesseMoyenne = (distance / tempsfinalB).toFixed(3);
   console.log(`Le temps final est ${tempsfinalB} secondes`);
   return {tempsfinalB , vitesseMoyenne};
 }
@@ -464,8 +464,8 @@ function calculsB() {
 function win() {
   let name_teamA = checkSettingsTeamA();
   let name_teamB = checkSettingsTeamB();
-  let teampsfinalA = calculsA();
-  let teampsfinalB = calculsB();
+  let teampsfinalA = calculsA()["tempsfinalA"];
+  let teampsfinalB = calculsB()["tempsfinalB"];
   if (teampsfinalA < teampsfinalB) {
     console.log(`${name_teamA} gagne`);
   } else if (teampsfinalA === teampsfinalB) {
@@ -529,7 +529,7 @@ function pushJson() {
 });
 };
 /**
- * 
+ * fonction qui permet de calculer le temps en plus en fonction de la courbe de patinage
  * @param {Object} team 
  * @returns 
  */
@@ -543,8 +543,7 @@ function patinage(team) {
       let timeaddpoint = parseFloat(team[i].ms / maxcourbe[i].ms - 1)*1.35+0.1*(team[i].ms - maxcourbe[i].ms)*(team[i].ms-maxcourbe[i].ms);
       timeadd.push(timeaddpoint);
     } else {
-      let timeaddpoint = 0;
-      timeadd.push(timeaddpoint);
+      timeadd.push(timeaddpoint = 0);
     };
   };
   tempsfinalenplus = add(timeadd);
