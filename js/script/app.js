@@ -19,6 +19,7 @@ let graphiqueB;
 // défini obejct 
 let teamA = [{ ms: 0, s: 0 }];
 let teamB = [{ ms: 0, s: 0 }];
+
 // défini nom des équipe
 let name_teamA = "";
 let name_teamB = "";
@@ -413,6 +414,7 @@ function resetB() {
 
 // calculs des résultats de distance et de temps de la team A 
 function calculsA() {
+  let tempsfinalenplus = patinage(teamA);
   let distancefinal = 75;
   let tempsfinalA = 0;
   let distance = 0;
@@ -427,12 +429,14 @@ function calculsA() {
   distance_retante = distancefinal - distance;
   tempsextra = distance_retante / teamA[teamA.length - 1].ms;
   tempsfinalA = teamA[teamA.length - 1].s + tempsextra;
-
+  tempsfinalA += tempsfinalenplus;
+  tempsfinalA = tempsfinalA.toFixed(3);
   console.log(`Le temps final est ${tempsfinalA} secondes`);
   return tempsfinalA;
 }
 
 function calculsB() {
+  let tempsfinalenplus = patinage(teamB);
   let distancefinal = 75;
   let tempsfinalB = 0;
   let distance = 0;
@@ -447,7 +451,8 @@ function calculsB() {
   distance_retante = distancefinal - distance;
   tempsextra = distance_retante / teamA[teamB.length - 1].ms;
   tempsfinalB = teamB[teamB.length - 1].s + tempsextra;
-
+  tempsfinalB += tempsfinalenplus;
+  tempsfinalB = tempsfinalB.toFixed(3);
   console.log(`Le temps final est ${tempsfinalB} secondes`);
   return tempsfinalB;
 }
@@ -519,3 +524,30 @@ function pushJson() {
     },
 });
 };
+/**
+ * 
+ * @param {Object} team 
+ * @returns 
+ */
+function patinage(team) {
+  const maxcourbe = [{ ms: 0, s: 0 }, { ms: 6, s: 1 }, { ms: 9, s: 2 }, { ms: 10.5, s: 3 }, { ms: 11.5, s: 4 }, { ms: 12, s: 5 }, { ms: 12, s: 6 }];
+  let timeadd = [];
+  let tempsfinalenplus = 0;
+  const add = timeadd => timeadd.reduce((a, b) => a + b, 0);
+
+  for (let i = 0; i < team.length; i++) {
+    if (team[i].ms > maxcourbe[i].ms) {
+      console.log(team[i].ms / maxcourbe[i].ms - 1);
+      let timeaddpoint = parseFloat(team[i].ms / maxcourbe[i].ms - 1)*1.35+0.1*(team[i].ms - maxcourbe[i].ms)*(team[i].ms-maxcourbe[i].ms);
+      timeadd.push(timeaddpoint);
+      console.log(timeadd);
+    } else {
+      console.log(team[i].ms < maxcourbe[i].ms);
+      let timeaddpoint = 0;
+      timeadd.push(timeaddpoint);
+      console.log(timeadd);
+    }
+  }
+  tempsfinalenplus = add(timeadd);
+  return tempsfinalenplus;
+}
