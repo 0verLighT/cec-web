@@ -5,7 +5,7 @@ function getapi() {
     fetch("http://91.163.145.45:2015/get_data")
     .then(res => res.json())
     .then(data => {
-        data.sort((a,b) => a.result > b.result)
+        // data.sort((a,b) => a.result > b.result)
         for (i of data) {
             inc++;
             let tr = document.createElement("tr")
