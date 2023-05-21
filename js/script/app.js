@@ -5,11 +5,10 @@ const span_name_teamA = document.getElementById("Name_team_span");
 const span_name_teamB = document.getElementById("Name_teamB_span");
 const vitesse_teamA = document.getElementById("vitesse_teamA");
 const vitesse_teamB = document.getElementById("vitesse_teamB");
-const box_infoA = document.getElementById("box_info");
-const box_infoB = document.getElementById("box_infoB");
+const box_info = document.getElementById("box_info","box_infoB");
 const box_checkA = document.getElementById("box_info_check");
 const box_checkB = document.getElementById("box_info_checkB");
-const btn_checkA = document.getElementById("btn_checkA");
+const btn_checkA = document.getElementById("btn_check");
 const btn_checkB = document.getElementById("btn_checkB");
 const section_teamA = document.getElementById("team_A");
 const section_teamB = document.getElementById("team_B");
@@ -44,20 +43,14 @@ function nameTeam(elementInput, elementSpan, team) {
 });
 };
 vitesse_teamA.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA)}
+  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", "graphiqueA", box_info)}
 });
 vitesse_teamB.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB)}
+  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", "graphiqueB", box_info)}
 });
-function append_data(team, vistesse, btn_check) {
-  let graphique = "";
-  if(team == teamA) {
-    graphique = "graphiqueA";
-  } else {
-    graphique = "graphiqueB";
-  };
+function append_data(team, vistesse, btn_check, elementCanvas, graphique) {
    if (team.length === 7) {
-    setupBoxinfo("Le tableau est déjà rempli", "red", box_infoA);
+    setupBoxinfo("Le tableau est déjà rempli", "red", box_info);
     return; 
   } else if (!(isNaN(parseFloat(vistesse.value)))){
     if (!(vistesse.value < 0 || vistesse.value > 12)) {
@@ -69,23 +62,23 @@ function append_data(team, vistesse, btn_check) {
       vistesse.value = "";
       team.push(teamValue);
       if(team.length === 7) {
-        createChart(team, graphique, "Chart_teamA");
-        btn_check.style.display = "visible";
+        createChart(team, graphique, elementCanvas);
+        btn_check.style.visibility = "visible";
         if (checkallvaluearezeros(team) === true) {
           checkallvaluearezeros(team, btn_check, graphique);
-          return setupBoxinfo("Faudrait peut-être accélérer un peu non ?", "red", box_checkA);
+          return setupBoxinfo("Faudrait peut-être accélérer un peu non ?", "red", box_info);
         } else if (checkallvalueare12(team) === true) {
           checkallvalueare12(team, btn_check, graphique);
-          return setupBoxinfo("Faudrait peut-être ralentir un peu non ?", "red", box_checkA);
+          return setupBoxinfo("Faudrait peut-être ralentir un peu non ?", "red", box_info);
         } else{
           checklastvalue(team, btn_checkA);
         }
       }
     } else { 
-    return setupBoxinfo("Le nombre est inférieur à 0 ou supérieur à 12", "red", box_infoA);
+    return setupBoxinfo("Le nombre est inférieur à 0 ou supérieur à 12", "red", box_info);
     };
   } else {
-  return setupBoxinfo("Ce n'est pas un nombre", "red", box_infoA);
+  return setupBoxinfo("Ce n'est pas un nombre", "red", box_info);
   }; 
 };
 function checklastvalue(team, btn_check, graphique) {
@@ -106,7 +99,7 @@ function checklastvalue(team, btn_check, graphique) {
  * @param {Element} btn_check 
  * @returns 
  */
-function reset(team, graphique, btn_check) {
+function reset(team, graphique, btn_check, elementTable) {
     if (team.length === 1) {
       return setupBoxinfo("Le tableau est déjà vide", "red", box_infoA);
     };
@@ -118,7 +111,7 @@ function reset(team, graphique, btn_check) {
   let reset = [{ ms: 0, s: 0 }];
   team.splice(0, team.length, ...reset);
   btn_check.style.visibility = "hidden";
-  afficherEquipes();
+  afficherEquipes(team,elementTable);
 };
 /**
  * 
@@ -184,7 +177,7 @@ function afficherEquipes(team, elementTable) {
 };
 function createChart( team, graphique , elementCanvas) {
   let name_graph = graphique;
-  const ctx = document.getElementById(elementCanvas).getcontext("2d");
+  const ctx = document.getElementById(elementCanvas);
     name_graph = new Chart(ctx, {
       type: "line",
       data: {
