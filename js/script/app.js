@@ -45,10 +45,10 @@ function nameTeam(elementInput, elementSpan, team) {
 });
 };
 vitesse_teamA.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", graphiqueA, box_info, "equipeContainerTeamA")}
+  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", 'graphiqueA', box_info, "equipeContainerTeamA")}
 });
 vitesse_teamB.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", graphiqueB, box_info, "equipeContainerTeamB")}
+  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", 'graphiqueB', box_info, "equipeContainerTeamB")}
 });
 function append_data(team, vistesse, btn_check, elementCanvas, graphique, box_info,elementTable) {
    if (team.length === 7) {
@@ -111,8 +111,7 @@ function afficherEquipes(team, elementTable) {
     });
     newTable.appendChild(row);
   });
-}
-
+};
 /**
  * 
  * @param {Array} team 
@@ -120,16 +119,14 @@ function afficherEquipes(team, elementTable) {
  * @param {Element} btn_check 
  * @returns 
 */
-function reset(team, graphique, btn_check, elementTable) {
-  console.log(team, graphique, btn_check, elementTable);
+function reset(team, elementCanvas, btn_check, elementTable) {
+  console.log(elementCanvas);
   if (team.length === 1) {
     return setupBoxinfo("Le tableau est déjà vide", "red", box_info);
   };
-  //mettre des paramtère et la function de createion de chart 
-  if (graphique) {
-    graphique.destroy();
-  }
-  console.log(`reset value team ${nameTeam}`);
+  // Supprime le chart
+  let chart = document.getElementById(elementCanvas);
+  chart.remove();
   let reset = [{ ms: 0, s: 0 }];
   team.splice(0, team.length, ...reset);
   btn_check.style.visibility = "hidden";
@@ -171,6 +168,7 @@ function setupBoxinfo(message, color , box_info) {
 */
 function createChart( team, graphique , elementCanvas) {
   const ctx = document.getElementById(elementCanvas);
+  console.log(graphique);
   graphique = new Chart(ctx, {
     type: "line",
     data: {
@@ -191,6 +189,7 @@ function createChart( team, graphique , elementCanvas) {
       },
     },
   });
+  console.log(graphique);
 };
 
 function calculs(team) {
@@ -229,6 +228,7 @@ function checkallvaluearezeros(arr, btn_check, graphique) {
   return arr.every((item) => item.ms === 0);
 };
 function checkallvalueare12(arr, btn, graphique) {
+  // erreur undefined
   console.log(btn)
   if (arr.slice(1).every((item) => item.ms === 12)) {
     btn.style.visibility = "hidden";
