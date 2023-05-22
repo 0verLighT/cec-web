@@ -45,14 +45,14 @@ function nameTeam(elementInput, elementSpan, team) {
 });
 };
 vitesse_teamA.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", graphiqueA, box_info, "equipe-container-1")}
+  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", graphiqueA, box_info, "equipeContainerTeamA")}
 });
 vitesse_teamB.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", graphiqueB, box_info, "equipe-container-2")}
+  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", graphiqueB, box_info, "equipeContainerTeamB")}
 });
-function append_data(team, vistesse, btn_check, elementCanvas, graphique, elementTable) {
+function append_data(team, vistesse, btn_check, elementCanvas, graphique, box_info,elementTable) {
    if (team.length === 7) {
-    setupBoxinfo("Le tableau est déjà rempli", "red", box_info);
+     setupBoxinfo("Le tableau est déjà rempli", "red", box_info);
     return; 
   } else if (!(isNaN(parseFloat(vistesse.value)))){
     if (!(vistesse.value < 0 || vistesse.value > 12)) {
@@ -63,7 +63,7 @@ function append_data(team, vistesse, btn_check, elementCanvas, graphique, elemen
       };
       vistesse.value = "";
       team.push(teamValue);
-      // afficherEquipes(team, elementTable);
+      afficherEquipes(team, elementTable);
       if(team.length === 7) {
         createChart(team, graphique, elementCanvas);
         btn_check.style.visibility = "visible";
@@ -74,16 +74,45 @@ function append_data(team, vistesse, btn_check, elementCanvas, graphique, elemen
           checkallvalueare12(team, btn_check, graphique);
           return setupBoxinfo("Faudrait peut-être ralentir un peu non ?", "red", box_info);
         } else{
-          checklastvalue(team, btn_checkA, graphique, elementTable);
+          checklastvalue(team, btn_check, graphique, elementTable);
         }
       }
     } else { 
     return setupBoxinfo("Le nombre est inférieur à 0 ou supérieur à 12", "red", box_info);
-    };
-  } else {
+  };
+} else {
   return setupBoxinfo("Ce n'est pas un nombre", "red", box_info);
   }; 
 };
+function afficherEquipes(team, elementTable) {
+  const container = document.getElementById(elementTable);
+  const table = document.getElementById(elementTable + "-table");
+  if (table && table.parentNode === container) {
+    container.removeChild(table);
+  }
+  const newTable = document.createElement("table");
+  newTable.setAttribute("id", elementTable + "-table"); // Utiliser l'ID dynamique
+  newTable.setAttribute("class", "table");
+  container.appendChild(newTable);
+  const headerRow = document.createElement("tr");
+  const headers = ["ms", "s"];
+  headers.forEach((headerText) => {
+    const th = document.createElement("th");
+    th.textContent = headerText;
+    headerRow.appendChild(th);
+  });
+  newTable.appendChild(headerRow);
+  team.forEach((equipe) => {
+    const row = document.createElement("tr");
+    Object.values(equipe).forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.appendChild(cell);
+    });
+    newTable.appendChild(row);
+  });
+}
+
 /**
  * 
  * @param {Array} team 
@@ -92,14 +121,15 @@ function append_data(team, vistesse, btn_check, elementCanvas, graphique, elemen
  * @returns 
 */
 function reset(team, graphique, btn_check, elementTable) {
+  console.log(team, graphique, btn_check, elementTable);
   if (team.length === 1) {
-    return setupBoxinfo("Le tableau est déjà vide", "red", bo);
+    return setupBoxinfo("Le tableau est déjà vide", "red", box_info);
   };
   //mettre des paramtère et la function de createion de chart 
   if (graphique) {
     graphique.destroy();
   }
-  console.log(`reset value team ${team}`);
+  console.log(`reset value team ${nameTeam}`);
   let reset = [{ ms: 0, s: 0 }];
   team.splice(0, team.length, ...reset);
   btn_check.style.visibility = "hidden";
@@ -139,34 +169,6 @@ function setupBoxinfo(message, color , box_info) {
  * @param {string} elementTable
  * @returns
 */
-function afficherEquipes(team, elementTable) {
-  const container = document.getElementById(elementTable);
-  const table = document.getElementById("equipe-table");
-  if (table) {
-    container.removeChild(table);
-  }
-  const newTable = document.createElement("table");
-  newTable.setAttribute("id", "equipe-table");
-  newTable.setAttribute("class", "table");
-  container.appendChild(newTable);
-  const headerRow = document.createElement("tr");
-  const headers = ["ms", "s"];
-  headers.forEach((headerText) => {
-    const th = document.createElement("th");
-    th.textContent = headerText;
-    headerRow.appendChild(th);
-  });
-  newTable.appendChild(headerRow);
-  team.forEach((equipe) => {
-    const row = document.createElement("tr");
-    Object.values(equipe).forEach((value) => {
-      const cell = document.createElement("td");
-      cell.textContent = value;
-      row.appendChild(cell);
-    });
-    newTable.appendChild(row);
-  });
-};
 function createChart( team, graphique , elementCanvas) {
   const ctx = document.getElementById(elementCanvas);
   graphique = new Chart(ctx, {
@@ -226,10 +228,11 @@ function checkallvaluearezeros(arr, btn_check, graphique) {
   }
   return arr.every((item) => item.ms === 0);
 };
-function checkallvalueare12(arr, btn_check, graphique) {
+function checkallvalueare12(arr, btn, graphique) {
+  console.log(btn)
   if (arr.slice(1).every((item) => item.ms === 12)) {
-    btn_check.style.visibility = "hidden";
-    reset(arr, btn_check, graphique);
+    btn.style.visibility = "hidden";
+    reset(arr, btn, graphique);
   }
   return arr.slice(1).every((item) => item.ms === 12);
 };
