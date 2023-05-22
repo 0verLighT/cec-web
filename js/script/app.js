@@ -14,6 +14,8 @@ const section_teamA = document.getElementById("team_A");
 const section_teamB = document.getElementById("team_B");
 let teamA = [{ ms: 0, s: 0 }];
 let teamB = [{ ms: 0, s: 0 }];
+let graphiqueA;
+let graphiqueB;
 input_name_teamA.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {nameTeam(input_name_teamA, span_name_teamA, "Équipe A");}
     if (e.key === "Backspace") {nameTeam( input_name_teamA,span_name_teamA, "Équipe A");}
@@ -43,12 +45,12 @@ function nameTeam(elementInput, elementSpan, team) {
 });
 };
 vitesse_teamA.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", "graphiqueA", box_info)}
+  if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", graphiqueA, box_info, "equipe-container-1")}
 });
 vitesse_teamB.addEventListener("keyup", (e) => {
-  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", "graphiqueB", box_info)}
+  if (e.key === "Enter") {append_data(teamB, vitesse_teamB, btn_checkB, "Chart_TeamB", graphiqueB, box_info, "equipe-container-2")}
 });
-function append_data(team, vistesse, btn_check, elementCanvas, graphique) {
+function append_data(team, vistesse, btn_check, elementCanvas, graphique, elementTable) {
    if (team.length === 7) {
     setupBoxinfo("Le tableau est déjà rempli", "red", box_info);
     return; 
@@ -61,6 +63,7 @@ function append_data(team, vistesse, btn_check, elementCanvas, graphique) {
       };
       vistesse.value = "";
       team.push(teamValue);
+      // afficherEquipes(team, elementTable);
       if(team.length === 7) {
         createChart(team, graphique, elementCanvas);
         btn_check.style.visibility = "visible";
@@ -71,7 +74,7 @@ function append_data(team, vistesse, btn_check, elementCanvas, graphique) {
           checkallvalueare12(team, btn_check, graphique);
           return setupBoxinfo("Faudrait peut-être ralentir un peu non ?", "red", box_info);
         } else{
-          checklastvalue(team, btn_checkA);
+          checklastvalue(team, btn_checkA, graphique, elementTable);
         }
       }
     } else { 
@@ -81,28 +84,17 @@ function append_data(team, vistesse, btn_check, elementCanvas, graphique) {
   return setupBoxinfo("Ce n'est pas un nombre", "red", box_info);
   }; 
 };
-function checklastvalue(team, btn_check, graphique) {
-    //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
-    if (team[team.length - 1].ms === 0) {
-        team.pop();
-        setupBoxinfo("La dernière valeur est 0 veuillez saisir une nouvelle valeur", "red", box_infoA);
-        afficherEquipes();
-        graphique.destroy();
-        btn_check.style.visibility = "hidden";
-        return console.log("la derniere valeur est 0");
-  };
-};
 /**
  * 
  * @param {Array} team 
  * @param {string} graphique 
  * @param {Element} btn_check 
  * @returns 
- */
+*/
 function reset(team, graphique, btn_check, elementTable) {
-    if (team.length === 1) {
-      return setupBoxinfo("Le tableau est déjà vide", "red", box_infoA);
-    };
+  if (team.length === 1) {
+    return setupBoxinfo("Le tableau est déjà vide", "red", bo);
+  };
   //mettre des paramtère et la function de createion de chart 
   if (graphique) {
     graphique.destroy();
@@ -121,7 +113,7 @@ function reset(team, graphique, btn_check, elementTable) {
  * @param {Element} span_name_teamA
  * @param {string} name_defaut
  * @returns 
- */
+*/
 function checkSettingsTeam(section_actuelle, section_suivante, input_name_teamA, span_name_teamA, name_defaut) {
   section_actuelle.style.display = "none";
   section_suivante.style.display = "flex";
@@ -133,7 +125,7 @@ function checkSettingsTeam(section_actuelle, section_suivante, input_name_teamA,
  * @param {string} message
  * @param {string} color
  * @param {Element} box_info
- */
+*/
 function setupBoxinfo(message, color , box_info) {
   box_info.textContent = message;
   box_info.style.color = color;
@@ -151,7 +143,7 @@ function afficherEquipes(team, elementTable) {
   const container = document.getElementById(elementTable);
   const table = document.getElementById("equipe-table");
   if (table) {
-      container.removeChild(table);
+    container.removeChild(table);
   }
   const newTable = document.createElement("table");
   newTable.setAttribute("id", "equipe-table");
@@ -160,41 +152,40 @@ function afficherEquipes(team, elementTable) {
   const headerRow = document.createElement("tr");
   const headers = ["ms", "s"];
   headers.forEach((headerText) => {
-      const th = document.createElement("th");
-      th.textContent = headerText;
-      headerRow.appendChild(th);
+    const th = document.createElement("th");
+    th.textContent = headerText;
+    headerRow.appendChild(th);
   });
   newTable.appendChild(headerRow);
   team.forEach((equipe) => {
-      const row = document.createElement("tr");
-      Object.values(equipe).forEach((value) => {
-          const cell = document.createElement("td");
-          cell.textContent = value;
-          row.appendChild(cell);
-      });
-      newTable.appendChild(row);
+    const row = document.createElement("tr");
+    Object.values(equipe).forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      row.appendChild(cell);
+    });
+    newTable.appendChild(row);
   });
 };
 function createChart( team, graphique , elementCanvas) {
-  let name_graph = graphique;
   const ctx = document.getElementById(elementCanvas);
-    name_graph = new Chart(ctx, {
-      type: "line",
-      data: {
-          labels: [team[0].s,team[1].s,team[2].s,team[3].s,team[4].s,team[5].s,team[6].s],
-          datasets: [
-              {
-                  label: "Courbe d'accélération",
-                  data: [team[0].ms,team[1].ms,team[2].ms,team[3].ms,team[4].ms,team[5].ms,team[6].ms],
-                  borderWidth: 1,
-              },
-          ],
-      },
-      options: {
-        scales: {
-          y: {
-              beginAtZero: true,
-          },
+  graphique = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [team[0].s,team[1].s,team[2].s,team[3].s,team[4].s,team[5].s,team[6].s],
+      datasets: [
+        {
+          label: "Courbe d'accélération",
+          data: [team[0].ms,team[1].ms,team[2].ms,team[3].ms,team[4].ms,team[5].ms,team[6].ms],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
       },
     },
   });
@@ -241,6 +232,17 @@ function checkallvalueare12(arr, btn_check, graphique) {
     reset(arr, btn_check, graphique);
   }
   return arr.slice(1).every((item) => item.ms === 12);
+};
+function checklastvalue(team, btn_check, graphique, elementTable) {
+    //verifie si la derniere valeur n'est pas 0  si oui la supprime avec un message d'erreur
+    if (team[team.length - 1].ms === 0) {
+        team.pop();
+        setupBoxinfo("La dernière valeur est 0 veuillez saisir une nouvelle valeur", "red", box_info);
+        afficherEquipes(team, elementTable);
+        graphique.destroy();
+        btn_check.style.visibility = "hidden";
+        return console.log("la derniere valeur est 0");
+  };
 };
 function pushJson() {
   let data =[ 
