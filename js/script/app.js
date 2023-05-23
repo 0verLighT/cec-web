@@ -27,22 +27,20 @@ input_name_teamB.addEventListener("keyup", (e) => {
 //lancer quand c'est entrer dans l'input et le bouton valider
 function nameTeam(elementInput, elementSpan, team) {
   let teamName = "";
-  elementInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        elementSpan.textContent = `(${elementInput.value.trim()})`;
-        teamName = elementInput.value.trim();
-    }
-    if (e.key === "Backspace") {
-        elementSpan.innerHTML = "";
-    }
-    if (elementSpan == null ||elementSpan.textContent === "" ||elementSpan.textContent === "()") {
-      teamName = team;
-    } else {
-      teamName = elementSpan.textContent.replace("(", "").replace(")", "");
-      console.log(teamName);
-    }
-    return teamName;
-});
+  if (elementSpan == null || elementSpan.textContent === "" || elementSpan.textContent === "()") {
+    teamName = team;
+  } else {
+    teamName = elementSpan.textContent.replace("(", "").replace(")", "");
+    console.log(teamName);
+  }
+
+  if (elementInput.value.trim() !== "") {
+    teamName = elementInput.value.trim();
+  }
+
+  elementSpan.textContent = `(${teamName})`;
+
+  return teamName;
 };
 vitesse_teamA.addEventListener("keyup", (e) => {
   if (e.key === "Enter") {append_data(teamA, vitesse_teamA, btn_checkA, "Chart_TeamA", 'graphiqueA', box_info, "equipeContainerTeamA")}
