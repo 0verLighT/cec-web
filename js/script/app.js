@@ -125,8 +125,12 @@ function reset(team, elementCanvas, btn_check, elementTable) {
     return setupBoxinfo("Le tableau est déjà vide", "red", box_info);
   };
   // Supprime le chart
-  let chart = document.getElementById(elementCanvas);
-  chart.remove();
+  if (graphiqueA !== undefined) {
+    graphiqueA.destroy();
+  }
+  if (graphiqueB !== undefined) {
+    graphiqueB.destroy();
+  }
   let reset = [{ ms: 0, s: 0 }];
   team.splice(0, team.length, ...reset);
   btn_check.style.visibility = "hidden";
@@ -167,29 +171,55 @@ function setupBoxinfo(message, color , box_info) {
  * @returns
 */
 function createChart( team, graphique , elementCanvas) {
-  const ctx = document.getElementById(elementCanvas);
-  console.log(graphique);
-  graphique = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: [team[0].s,team[1].s,team[2].s,team[3].s,team[4].s,team[5].s,team[6].s],
-      datasets: [
-        {
-          label: "Courbe d'accélération",
-          data: [team[0].ms,team[1].ms,team[2].ms,team[3].ms,team[4].ms,team[5].ms,team[6].ms],
-          borderWidth: 1,
+  if (elementCanvas === "Chart_TeamA") {
+    const ctx = document.getElementById(elementCanvas);
+    if (ctx) {
+      graphiqueA = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [team[0].s,team[1].s,team[2].s,team[3].s,team[4].s,team[5].s,team[6].s],
+          datasets: [
+            {
+              label: "Courbe d'accélération",
+              data: [team[0].ms,team[1].ms,team[2].ms,team[3].ms,team[4].ms,team[5].ms,team[6].ms],
+              borderWidth: 1,
+            },
+          ],
         },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
         },
-      },
-    },
-  });
-  console.log(graphique);
+      });
+    }
+  } else if (elementCanvas === "Chart_TeamB") {
+    const ctx = document.getElementById(elementCanvas);
+    if (ctx) {
+      graphiqueB = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [team[0].s,team[1].s,team[2].s,team[3].s,team[4].s,team[5].s,team[6].s],
+          datasets: [
+            {
+              label: "Courbe d'accélération",
+              data: [team[0].ms,team[1].ms,team[2].ms,team[3].ms,team[4].ms,team[5].ms,team[6].ms],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    } 
+    }
 };
 
 function calculs(team) {
