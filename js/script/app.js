@@ -252,7 +252,7 @@ function win() {
  * @param {Element} box_info 
  * @returns 
  */
-function checkallcondition(arr, btn_check , graphique, elementTable, box_info) {
+function checkallcondition(arr, btn_check , graphique,box_info, elementTable) {
   if (arr.every((item) => item.ms === 0)) {
     btn_check.style.visibility = "hidden";
     setupBoxinfo("Faudrait peut-être accélérer un peu non ?", "red", box_info)
@@ -279,15 +279,16 @@ function pushJson() {
   let data =[ 
     {
       "name" : checkName(input_name_teamA , input_name_teamB)[0],
-      "result" : calculsA()["tempsfinal"],
-      "vitesse" : calculsA()["vitesseMoyenne"]
+      "result" : calculs(teamA)["tempsfinal"],
+      "vitesse" : calculs(teamA)["vitesseMoyenne"]
     },
     {
       "name" : checkName(input_name_teamA , input_name_teamB)[1],
-      "result" : calculsA()["tempsfinal"],
-      "vitesse" : calculsB()["vitesseMoyenne"]
+      "result" : calculs(teamB)["tempsfinal"],
+      "vitesse" : calculs(teamB)["vitesseMoyenne"]
     }
   ]
+  
   fetch("http://91.163.145.45:2015/append_data", {
     method: "POST",
     body: JSON.stringify(data),
@@ -295,6 +296,7 @@ function pushJson() {
         "Content-Type": "application/json"
     },
 });
+return data;
 };
 /**
  * fonction qui permet de calculer le temps en plus en fonction de la courbe de patinage
