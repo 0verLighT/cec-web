@@ -34,13 +34,13 @@ function nameTeam(elementInput, elementSpan) {
     teamName = elementInput.value.trim();
   }
   elementSpan.textContent = `(${teamName})`;
-  return teamName;
+  return teamName ;
 };
 function checkName(elementInput1, elementInput2) {
   // input_name_teamA , input_name_teamB
   let teamNameValue = {
-    name_teamA: elementInput1.value.trim() || "Équipe A",
-    name_teamB: elementInput2.value.trim() || "Équipe B"
+    name_teamA: elementInput1.value.trim(),
+    name_teamB: elementInput2.value.trim(),
     };
   return teamNameValue;
 } 
@@ -138,12 +138,15 @@ function reset(team, elementCanvas, btn_check, elementTable) {
  * @param {string} name_defaut
  * @returns 
 */
-function checkSettingsTeam(section_actuelle, section_suivante, input_name_teamA, span_name_teamA, name_defaut) {
-  section_actuelle.style.display = "none";
-  section_suivante.style.display = "flex";
-  nameTeam(input_name_teamA, span_name_teamA, name_defaut);
-  return ;
-}
+function checkSettingsTeam(section_actuelle, section_suivante, span_name_team) {
+  if (span_name_team.textContent.trim() === "") {
+    return setupBoxinfo("Veuillez entrer un nom d'équipe", "red", box_info);
+  } else {
+    section_actuelle.style.display = "none";
+    section_suivante.style.display = "flex";
+    return;
+  };
+};
 /**
  * Ajoute un message d'erreur dans la box_info
  * @param {string} message
@@ -320,3 +323,8 @@ function patinage(team) {
   tempsfinalenplus = add(timeadd);
   return tempsfinalenplus;
 };
+function simu_course() {
+  let canvas = document.getElementById("interface_course");
+  let ctx = canvas.getContext("2d");
+  
+}
