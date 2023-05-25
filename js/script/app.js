@@ -34,14 +34,14 @@ function nameTeam(elementInput, elementSpan) {
     teamName = elementInput.value.trim();
   }
   elementSpan.textContent = `(${teamName})`;
-  return teamName;
+  return teamName ;
 };
 function checkName(elementInput1, elementInput2) {
   // input_name_teamA , input_name_teamB
-  let teamNameValue = [
-    {name_teamA: elementInput1.value.trim() || "Équipe A"},
-    {name_teamB: elementInput2.value.trim() || "Équipe B"},
-  ];
+  let teamNameValue = {
+    name_teamA: elementInput1.value.trim(),
+    name_teamB: elementInput2.value.trim(),
+    };
   return teamNameValue;
 } 
 vitesse_teamA.addEventListener("keyup", (e) => {
@@ -138,12 +138,15 @@ function reset(team, elementCanvas, btn_check, elementTable) {
  * @param {string} name_defaut
  * @returns 
 */
-function checkSettingsTeam(section_actuelle, section_suivante, input_name_teamA, span_name_teamA, name_defaut) {
-  section_actuelle.style.display = "none";
-  section_suivante.style.display = "flex";
-  nameTeam(input_name_teamA, span_name_teamA, name_defaut);
-  return ;
-}
+function checkSettingsTeam(section_actuelle, section_suivante, span_name_team) {
+  if (span_name_team.textContent.trim() === "") {
+    return setupBoxinfo("Veuillez entrer un nom d'équipe", "red", box_info);
+  } else {
+    section_actuelle.style.display = "none";
+    section_suivante.style.display = "flex";
+    return;
+  };
+};
 /**
  * Ajoute un message d'erreur dans la box_info
  * @param {string} message
@@ -276,14 +279,15 @@ function checkallcondition(arr, btn_check , graphique,box_info, elementTable) {
   }
 };
 function pushJson() {
+  let teamNames = checkName(input_name_teamA, input_name_teamB);
   let data =[ 
     {
-      "name" : checkName(input_name_teamA , input_name_teamB)[0],
+      "name" : teamNames.name_teamA,
       "result" : calculs(teamA)["tempsfinal"],
       "vitesse" : calculs(teamA)["vitesseMoyenne"]
     },
     {
-      "name" : checkName(input_name_teamA , input_name_teamB)[1],
+      "name" : teamNames.name_teamB,
       "result" : calculs(teamB)["tempsfinal"],
       "vitesse" : calculs(teamB)["vitesseMoyenne"]
     }
@@ -309,8 +313,8 @@ function patinage(team) {
   let tempsfinalenplus = 0;
   const add = timeadd => timeadd.reduce((a, b) => a + b, 0);
   for (let i = 0; i < team.length; i++) {
-    if (team[i].ms > _0x58c4x2[i].ms) {
-      let timeaddpoint = parseFloat(team[i]/ _0x58c4x2[i] - 1)*1.35+0.1*(team[i].ms - _0x58c4x2[i])*(team[i].ms-_0x58c4x2[i]);
+    if (team[i].ms > _0x58c4x2[i]) {
+      let timeaddpoint = parseFloat(team[i].ms/ _0x58c4x2[i] - 1)*1.35+0.1*(team[i].ms - _0x58c4x2[i])*(team[i].ms-_0x58c4x2[i]);
       timeadd.push(timeaddpoint);
     } else {
       timeadd.push(timeaddpoint = 0);
@@ -319,3 +323,8 @@ function patinage(team) {
   tempsfinalenplus = add(timeadd);
   return tempsfinalenplus;
 };
+function simu_course() {
+  let canvas = document.getElementById("interface_course");
+  let ctx = canvas.getContext("2d");
+  
+}

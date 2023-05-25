@@ -12,7 +12,7 @@
   </head>
   <body>
     <section id="team_A" style="display: block">
-      <h3 class="name-tag">Équipe 1 <span id="Name_team_span"></span></h3>
+      <h3 class="name-tag">Équipe 1 <span id="Name_team_span"> </span></h3>
       <div class="flexA">
         <div class="input_data">
           <input type="text" name="Nom_equipe" id="Name_team" placeholder="Nom de l'équipe" autocomplete="off">
@@ -29,11 +29,11 @@
         </div>
       </div>
       <div class="valide_box">
-        <button type="button" onclick="checkSettingsTeam(team_A, team_B,Name_team,Name_team_span,)"class="btn-check" id="btn_check">Valider</button>
+        <button type="button" onclick="checkSettingsTeam(team_A, team_B,Name_team_span)"class="btn-check" id="btn_check">Valider</button>
       </div>
     </section>
     <section id="team_B" class="team_B">
-      <h3 class="name-tag">Équipe 2 <span id="Name_teamB_span"></span></h3>
+      <h3 class="name-tag">Équipe 2 <span id="Name_teamB_span"> </span></h3>
       <div class="flexB">
         <div class="input_data">
           <input type="text" name="Nom_equipe"id="Name_teamB"placeholder="Nom de l'équipe" autocomplete="off">
@@ -52,7 +52,10 @@
       </div>
       <!-- <button type="button" onclick="location.reload()">testmgl</button> -->
     </section>
-    <section id="animation_game"></section>
+    <section id="animation_game" class="animation_game">
+      <h3 class="title_lastsection">Résultat</h3>
+      <canvas id="interface_course" class="canvas_simu"></canvas>
+    </section>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/script/app.js"></script>
   </body>
