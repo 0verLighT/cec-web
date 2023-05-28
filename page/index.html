@@ -48,14 +48,49 @@
         <canvas id="Chart_TeamB"></canvas>
       </div>
       <div class="valide_box">
-        <button type="button" onclick="checkSettingsTeam(team_B, animation_game, Name_teamB, Name_teamB_span)" class="btn-checkB" id="btn_checkB">Valider</button>
+        <button type="button" onclick="checkSettingsTeam(team_B, animation_game, Name_teamB_span)" class="btn-checkB" id="btn_checkB">Valider</button>
       </div>
-      <!-- <button type="button" onclick="location.reload()">testmgl</button> -->
     </section>
     <section id="animation_game" class="animation_game">
       <h3 class="title_lastsection">Résultat</h3>
-      <canvas id="interface_course" class="canvas_simu"></canvas>
+      <h3 id="name_winner"></h3>
+      <div id="setTimeDown" style="display: none;">
+        <h3 id="msg_info"></h3>
+      </div>
+      <div id="result_game">
+        
+      </div>
+      <div>
+        <button type="button" onclick="location.reload()" class="btn-reload">Rejouer</button>
+        <a href="./classement.html">
+          <button type="button" class="btn-classement">Classement</button>
+        </a>
+      </div>
     </section>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script>
+      function typemsgresult() {
+        pushJson();
+        let teamATime = calculs(teamA)["tempsfinal"];
+        let teamBTime = calculs(teamB)["tempsfinal"]
+        let teamNames = checkName(input_name_teamA, input_name_teamB);
+        //ajouter du temps d'attend 
+        // if(animation_game.style.display !== "none") {
+          
+        // }
+
+        //dire le résulat
+        if(teamATime > teamBTime) {
+          let win = document.getElementById("name_winner");
+          let typeeffect = new Typed('#name_winner', {
+            cursorChar: ' ',
+            strings: [`L'Équipe ${teamNames.name_teamA} gagne elle a parccouru 75 en ${teamATime}s`],
+            typeSpeed : 50,
+            
+          });
+        };
+      };
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/script/app.js"></script>
   </body>

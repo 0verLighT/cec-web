@@ -1,4 +1,3 @@
-//définition des éléments du DOM
 const input_name_teamA = document.getElementById("Name_team");
 const input_name_teamB = document.getElementById("Name_teamB");
 const span_name_teamA = document.getElementById("Name_team_span");
@@ -25,7 +24,6 @@ input_name_teamB.addEventListener("keyup", (e) => {
   if (e.key === "Enter") {nameTeam(input_name_teamB, span_name_teamB);}
   if (e.key === "Backspace") {nameTeam(input_name_teamB,span_name_teamB);}
 });
-//lancer quand c'est entrer dans l'input et le bouton valider
 function nameTeam(elementInput, elementSpan) {
   let teamName = "";
   teamName = elementSpan.textContent.replace("(", "").replace(")", "");
@@ -104,20 +102,11 @@ function afficherEquipes(team, elementTable) {
     newTable.appendChild(row);
   });
 };
-/**
- * 
- * @param {Array} team 
- * @param {string} graphique 
- * @param {Element} btn_check 
- * @param {Element} elementCanvas
- * @returns 
-*/
 function reset(team, elementCanvas, btn_check, elementTable) {
   console.log(elementCanvas);
   if (team.length === 1) {
     return setupBoxinfo("Le tableau est déjà vide", "red", box_info);
   };
-  // Supprime le chart
   if (graphiqueA !== undefined) {
     graphiqueA.destroy();
   }
@@ -129,30 +118,16 @@ function reset(team, elementCanvas, btn_check, elementTable) {
   btn_check.style.visibility = "hidden";
   afficherEquipes(team,elementTable);
 };
-/**
- * 
- * @param {Element} section_actuelle 
- * @param {Element} section_suivante 
- * @param {Element} input_name_teamA
- * @param {Element} span_name_teamA
- * @param {string} name_defaut
- * @returns 
-*/
 function checkSettingsTeam(section_actuelle, section_suivante, span_name_team) {
   if (span_name_team.textContent.trim() === "") {
     return setupBoxinfo("Veuillez entrer un nom d'équipe", "red", box_info);
   } else {
     section_actuelle.style.display = "none";
-    section_suivante.style.display = "flex";
+    section_suivante.style.display = "block";
     return;
   };
 };
-/**
- * Ajoute un message d'erreur dans la box_info
- * @param {string} message
- * @param {string} color
- * @param {Element} box_info
-*/
+
 function setupBoxinfo(message, color , box_info) {
   box_info.textContent = message;
   box_info.style.color = color;
@@ -160,12 +135,6 @@ function setupBoxinfo(message, color , box_info) {
     box_info.textContent = "";
   }, 5000);
 }
-/**
- * crée un tableau dans le DOM et l'ajoute à la page
- * @param {Array} team
- * @param {string} elementTable
- * @returns
-*/
 function createChart( team, graphique , elementCanvas) {
   if (elementCanvas === "Chart_TeamA") {
     const ctx = document.getElementById(elementCanvas);
@@ -215,46 +184,8 @@ function createChart( team, graphique , elementCanvas) {
         },
       });
     } 
-    }
-};
-
-function calculs(team) {
-  let tempsfinalenplus = patinage(team);
-  let distancefinal = 75;
-  let tempsfinal = 0;
-  let distance = 0;
-  let distance_retante = 0;
-  let tempsextra = 0;
-  let vitesseMoyenne = 0;
-  for (let i = 0; i < team.length - 1; i++) {
-    distance += 0.5 * (team[i].ms + team[i + 1].ms);
   }
-  distance_retante = distancefinal - distance;
-  tempsextra = distance_retante / team[team.length - 1].ms;
-  tempsfinal = (team[team.length - 1].s + tempsextra + tempsfinalenplus).toFixed(3);
-  vitesseMoyenne = (distancefinal / tempsfinal).toFixed(3);
-  console.log(`Le temps final est ${tempsfinal} secondes`);
-  return { tempsfinal, vitesseMoyenne};
 };
-
-function win() {
-  if (calculs(teamA)["tempsfinal"] < calculs(teamB)["tempsfinal"]) {
-    console.log(`${nameTeam(teamA)} gagne`);
-  } else if (calculs(teamA)["tempsfinal"] === calculs(teamB)["tempsfinal"]) {
-    console.log(`égalité entre ${nameTeam(teamA)} et ${nameTeam(teamB)} avec ${calculs()["tempsfinal"]} secondes`);
-  } else {
-    console.log(`${nameTeam(teamB)} gagne`);
-  };
-};
-/**
- * 
- * @param {Array} arr 
- * @param {Element} btn_check 
- * @param {string} graphique 
- * @param {Element} elementTable 
- * @param {Element} box_info 
- * @returns 
- */
 function checkallcondition(arr, btn_check , graphique,box_info, elementTable) {
   if (arr.every((item) => item.ms === 0)) {
     btn_check.style.visibility = "hidden";
@@ -278,6 +209,33 @@ function checkallcondition(arr, btn_check , graphique,box_info, elementTable) {
     return console.log("la derniere valeur est 0");
   }
 };
+function calculs(team) {
+  let tempsfinalenplus = patinage(team);
+  let distancefinal = 75;
+  let tempsfinal = 0;
+  let distance = 0;
+  let distance_retante = 0;
+  let tempsextra = 0;
+  let vitesseMoyenne = 0;
+  for (let i = 0; i < team.length - 1; i++) {
+    distance += 0.5 * (team[i].ms + team[i + 1].ms);
+  }
+  distance_retante = distancefinal - distance;
+  tempsextra = distance_retante / team[team.length - 1].ms;
+  tempsfinal = (team[team.length - 1].s + tempsextra + tempsfinalenplus).toFixed(3);
+  vitesseMoyenne = (distancefinal / tempsfinal).toFixed(3);
+  return { tempsfinal, vitesseMoyenne , team};
+};
+
+function win() {
+  if (calculs(teamA)["tempsfinal"] < calculs(teamB)["tempsfinal"]) {
+    console.log(`${nameTeam(teamA)} gagne`);
+  } else if (calculs(teamA)["tempsfinal"] === calculs(teamB)["tempsfinal"]) {
+    console.log(`égalité entre ${nameTeam(teamA)} et ${nameTeam(teamB)} avec ${calculs(teamA)["tempsfinal"]} secondes`);
+  } else {
+    console.log(`${nameTeam(teamB)} gagne`);
+  };
+};
 function pushJson() {
   let teamNames = checkName(input_name_teamA, input_name_teamB);
   let data =[ 
@@ -300,13 +258,8 @@ function pushJson() {
         "Content-Type": "application/json"
     },
 });
-return data;
+return;
 };
-/**
- * fonction qui permet de calculer le temps en plus en fonction de la courbe de patinage
- * @param {Object} team 
- * @returns 
- */
 function patinage(team) {
   const _0x58c4x2 = [0,6,9,10.5,11.5,12,12,];
   let timeadd = [];
@@ -323,8 +276,3 @@ function patinage(team) {
   tempsfinalenplus = add(timeadd);
   return tempsfinalenplus;
 };
-function simu_course() {
-  let canvas = document.getElementById("interface_course");
-  let ctx = canvas.getContext("2d");
-  
-}
