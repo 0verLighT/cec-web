@@ -26,3 +26,9 @@ tr {
     justify-content: center;
     align-items: center;
 }
+.button_back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
