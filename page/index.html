@@ -74,22 +74,69 @@
         let teamATime = calculs(teamA)["tempsfinal"];
         let teamBTime = calculs(teamB)["tempsfinal"]
         let teamNames = checkName(input_name_teamA, input_name_teamB);
-        //ajouter du temps d'attend 
-        // if(animation_game.style.display !== "none") {
-          
-        // }
-
-        //dire le résulat
-        if(teamATime > teamBTime) {
-          let win = document.getElementById("name_winner");
-          let typeeffect = new Typed('#name_winner', {
-            cursorChar: ' ',
-            strings: [`L'Équipe ${teamNames.name_teamA} gagne elle a parccouru 75 en ${teamATime}s`],
-            typeSpeed : 50,
-            
-          });
-        };
-      };
+        let GitInfo = `Pour plus d'information sur le projet vous pouvez aller voir le <a href="https://github.com/0verLighT/cec-web/blob/main/README.md">ReadMe</a> sur Github`;
+        if (teamATime > teamBTime) {
+            let winTeamMessage = `L'Équipe ${teamNames.name_teamA} a parcouru 75m en ${teamATime}s`;
+            let loseTeamMessage = `L'Équipe perdante ${teamNames.name_teamB} elle a parcouru 75m en ${teamBTime}s`;
+            let win = document.getElementById("name_winner");
+            let typeEffecTitle = new Typed('#name_winner', {
+              cursorChar: ' ',
+              strings: [winTeamMessage],
+              typeSpeed: 50,
+              onComplete: function() {
+                let typeEffectLose = new Typed('#LoseInfo', {
+                  cursorChar: ' ',
+                  strings: [loseTeamMessage],
+                  typeSpeed: 50,
+                  onComplete: function() {
+                    let typeEffectGit = new Typed('#GitInfo', {
+                      cursorChar: ' ',
+                      strings: [GitInfo],
+                      typeSpeed: 50,
+                    });
+                  }
+                });
+              }
+            });
+          } else if (teamATime < teamBTime) {
+            let winTeamMessage = `L'Équipe ${teamNames.name_teamB} a parcouru 75m en ${teamBTime}s`;
+            let loseTeamMessage = `L'Équipe perdante ${teamNames.name_teamA} elle a parcouru 75m en ${teamATime}s`;
+            let win = document.getElementById("name_winner");
+            let typeEffecTitle = new Typed('#name_winner', {
+              cursorChar: ' ',
+              strings: [winTeamMessage],
+              typeSpeed: 50,
+              onComplete: function() {
+                let typeEffectLose = new Typed('#LoseInfo', {
+                  cursorChar: ' ',
+                  strings: [loseTeamMessage],
+                  typeSpeed: 50,
+                  onComplete: function() {
+                    let typeEffectGit = new Typed('#GitInfo', {
+                      cursorChar: ' ',
+                      strings: [GitInfo],
+                      typeSpeed: 50,
+                    });
+                  }
+                });
+              }
+            });
+          } else if (teamATime == teamBTime) {
+            let winTeamMessage = `L'Équipe ${teamNames.name_teamA} et l'Équipe ${teamNames.name_teamB} ont parcouru 75m en ${teamATime}s, c'est donc une égalité !`;
+            let win = document.getElementById("name_winner");
+            let typeEffecTitle = new Typed('#name_winner', {
+              cursorChar: ' ',
+              strings: [winTeamMessage],
+              typeSpeed: 50,
+              onComplete: function() {
+                let typeEffectGit = new Typed('#GitInfo', {
+                  cursorChar: ' ',
+                  strings: [GitInfo],
+                  typeSpeed: 50,
+                });
+              }
+            });
+          }};
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/script/app.js"></script>
