@@ -21,7 +21,19 @@
           <button type="button" class="reset" id="btn_reset" onclick="reset(teamA, 'Chart_TeamA', btn_checkA, 'equipeContainerTeamA')">Rénisialiser Tableau</button>
           <span id="box_info"></span>
         </div>
-        <div id="equipeContainerTeamA"></div>
+        <img src="../static/img/voiture_avant_tintin.png" alt="Voiture de l'équipe A" class="voiture_tintin">
+        <div id="equipeContainerTeamA">
+          <table id="equipeContainerTeamA-table" class="table">
+            <tr>
+              <th>ms</th>
+              <th>s</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </table>
+        </div>
       </div>
       <div class="BoxCanvaBtn">
         <div style="display: flex; height: 50vh; width: 100vw">
@@ -42,7 +54,19 @@
           <button type="button" class="reset" id="btn_reset" onclick="reset(teamB, 'Chart_TeamB', btn_checkB, 'equipeContainerTeamB')">Rénisialiser Tableau</button>
           <span id="box_infoB"></span>
         </div>
-        <div id="equipeContainerTeamB"></div>
+        <img src="../static/img/Voiture_vue_face_eau.png" alt="Voiture de l'équipe B" class="voiture_eau">
+        <div id="equipeContainerTeamB">
+          <table id="equipeContainerTeamB-table" class="table">
+            <tr>
+              <th>ms</th>
+              <th>s</th>
+            </tr>
+            <tr>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </table>
+        </div>
       </div>
       <div style="display: flex; height: 50vh; width: 100vw">
         <canvas id="Chart_TeamB"></canvas>
@@ -53,17 +77,26 @@
     </section>
     <section id="animation_game" class="animation_game">
       <h3 class="title_lastsection">Résultat</h3>
-      <h3 id="name_winner"></h3>
-      <div id="setTimeDown" style="display: none;">
-        <h3 id="msg_info"></h3>
+      <div>
+        <div id="rectangle" class="route">
+          <div id="teamA" class="teamA">
+            <img src="../static/img/voiture_tintin_de_haut.png" alt="VOiture de l'équipe A vue de haut" class="voiture_tintin_vue_de_haut">
+          </div>
+          <div class="center-band"></div>
+          <div id="teamB" class="teamB">
+            <img src="../static/img/voiture_vue_de_haut_eau.png" alt=" voiture de l'équipe B vue de haut" class="voiture_eau_vue_de_haut">
+          </div>
+        </div>
       </div>
       <div id="result_game">
-        
+        <h3 id="name_winner"></h3>
+        <h3 id="LoseInfo"></h3>
+        <p id="GitInfo"></p>
       </div>
-      <div>
+      <div class="buttonLast">
         <button type="button" onclick="location.reload()" class="btn-reload">Rejouer</button>
         <a href="./classement.html">
-          <button type="button" class="btn-classement">Classement</button>
+          <button type="button" class="btn-classement" style="height: 100%;">Classement</button>
         </a>
       </div>
     </section>
@@ -72,50 +105,52 @@
       function typemsgresult() {
         pushJson();
         let teamATime = calculs(teamA)["tempsfinal"];
-        let teamBTime = calculs(teamB)["tempsfinal"]
+        let teamBTime = calculs(teamB)["tempsfinal"];
+        console.log(teamATime, teamBTime ); //output: 8.682 10.500
         let teamNames = checkName(input_name_teamA, input_name_teamB);
+        let speed = 20;
         let GitInfo = `Pour plus d'information sur le projet vous pouvez aller voir le <a href="https://github.com/0verLighT/cec-web/blob/main/README.md">ReadMe</a> sur Github`;
-        if (teamATime > teamBTime) {
+        if ( teamBTime > teamATime ) {
             let winTeamMessage = `L'Équipe ${teamNames.name_teamA} a parcouru 75m en ${teamATime}s`;
-            let loseTeamMessage = `L'Équipe perdante ${teamNames.name_teamB} elle a parcouru 75m en ${teamBTime}s`;
+            let loseTeamMessage = `L'Équipe ${teamNames.name_teamB} elle a parcouru 75m en ${teamBTime}s`;
             let win = document.getElementById("name_winner");
-            let typeEffecTitle = new Typed('#name_winner', {
+            let typeEffecTitle = new Typed(win, {
               cursorChar: ' ',
               strings: [winTeamMessage],
-              typeSpeed: 50,
+              typeSpeed: speed,
               onComplete: function() {
                 let typeEffectLose = new Typed('#LoseInfo', {
                   cursorChar: ' ',
                   strings: [loseTeamMessage],
-                  typeSpeed: 50,
+                  typeSpeed: speed,
                   onComplete: function() {
                     let typeEffectGit = new Typed('#GitInfo', {
                       cursorChar: ' ',
                       strings: [GitInfo],
-                      typeSpeed: 50,
+                      typeSpeed: speed,
                     });
                   }
                 });
               }
             });
-          } else if (teamATime < teamBTime) {
+          } else if ( teamATime > teamBTime) {
             let winTeamMessage = `L'Équipe ${teamNames.name_teamB} a parcouru 75m en ${teamBTime}s`;
-            let loseTeamMessage = `L'Équipe perdante ${teamNames.name_teamA} elle a parcouru 75m en ${teamATime}s`;
+            let loseTeamMessage = `L'Équipe ${teamNames.name_teamA} elle a parcouru 75m en ${teamATime}s`;
             let win = document.getElementById("name_winner");
-            let typeEffecTitle = new Typed('#name_winner', {
+            let typeEffecTitle = new Typed(win, {
               cursorChar: ' ',
               strings: [winTeamMessage],
-              typeSpeed: 50,
+              typeSpeed: speed,
               onComplete: function() {
                 let typeEffectLose = new Typed('#LoseInfo', {
                   cursorChar: ' ',
                   strings: [loseTeamMessage],
-                  typeSpeed: 50,
+                  typeSpeed: speed,
                   onComplete: function() {
                     let typeEffectGit = new Typed('#GitInfo', {
                       cursorChar: ' ',
                       strings: [GitInfo],
-                      typeSpeed: 50,
+                      typeSpeed: speed,
                     });
                   }
                 });
@@ -124,19 +159,20 @@
           } else if (teamATime == teamBTime) {
             let winTeamMessage = `L'Équipe ${teamNames.name_teamA} et l'Équipe ${teamNames.name_teamB} ont parcouru 75m en ${teamATime}s, c'est donc une égalité !`;
             let win = document.getElementById("name_winner");
-            let typeEffecTitle = new Typed('#name_winner', {
+            let typeEffecTitle = new Typed(win, {
               cursorChar: ' ',
               strings: [winTeamMessage],
-              typeSpeed: 50,
+              typeSpeed: speed,
               onComplete: function() {
                 let typeEffectGit = new Typed('#GitInfo', {
                   cursorChar: ' ',
                   strings: [GitInfo],
-                  typeSpeed: 50,
+                  typeSpeed: speed,
                 });
               }
             });
-          }};
+          }
+        return;};
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/script/app.js"></script>

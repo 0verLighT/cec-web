@@ -258,7 +258,7 @@ function pushJson() {
         "Content-Type": "application/json"
     },
 });
-return;
+return data;
 };
 function patinage(team) {
   const _0x58c4x2 = [0,6,9,10.5,11.5,12,12,];
@@ -276,3 +276,6 @@ function patinage(team) {
   tempsfinalenplus = add(timeadd);
   return tempsfinalenplus;
 };
+function animation_result() {
+  
+}
