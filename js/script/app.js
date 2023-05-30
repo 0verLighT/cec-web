@@ -279,14 +279,14 @@ function animation_result() {
   voitureObjectifLune.style.transition = `transform ${timeATanslaste / 2}s`; 
   voitureEau.style.transition = `transform ${timeBTanslaste / 2}s`;
   if(timeATanslaste < timeBTanslaste) {
-    voitureObjectifLune.style.transform = "translateX(1120px)";
+    voitureObjectifLune.style.transform = "translateX(1220px)";
     voitureEau.style.transform = "translateX(860px)";
   } else if(timeBTanslaste < timeATanslaste ) {
-    voitureEau.style.transform = "translateX(1120px)";
+    voitureEau.style.transform = "translateX(1220px)";
     voitureObjectifLune.style.transform = "translateX(860px)";
   } else if(timeATanslaste === timeBTanslaste){
-    voitureEau.style.transform = "translateX(1120px)";
-    voitureObjectifLune.style.transform = "translateX(1120px)";
+    voitureEau.style.transform = "translateX(1220px)";
+    voitureObjectifLune.style.transform = "translateX(1220px)";
   }
   typemsgresult()
   buttonLast.style.display = "flex"
