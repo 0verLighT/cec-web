@@ -17,11 +17,11 @@ let teamB = [{ ms: 0, s: 0 }];
 let graphiqueA;
 let graphiqueB;
 input_name_teamA.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {nameTeam(input_name_teamA, span_name_teamA);}
+    if (e.key === "Enter" || "Tab") {nameTeam(input_name_teamA, span_name_teamA);}
     if (e.key === "Backspace") {nameTeam( input_name_teamA,span_name_teamA);}
 });
 input_name_teamB.addEventListener("keyup", (e) => { 
-  if (e.key === "Enter") {nameTeam(input_name_teamB, span_name_teamB);}
+  if (e.key === "Enter" || "Tab") {nameTeam(input_name_teamB, span_name_teamB);}
   if (e.key === "Backspace") {nameTeam(input_name_teamB,span_name_teamB);}
 });
 function nameTeam(elementInput, elementSpan) {
@@ -226,16 +226,6 @@ function calculs(team) {
   vitesseMoyenne = (distancefinal / tempsfinal).toFixed(3);
   return { tempsfinal, vitesseMoyenne , team};
 };
-
-function win() {
-  if (calculs(teamA)["tempsfinal"] < calculs(teamB)["tempsfinal"]) {
-    console.log(`${nameTeam(teamA)} gagne`);
-  } else if (calculs(teamA)["tempsfinal"] === calculs(teamB)["tempsfinal"]) {
-    console.log(`égalité entre ${nameTeam(teamA)} et ${nameTeam(teamB)} avec ${calculs(teamA)["tempsfinal"]} secondes`);
-  } else {
-    console.log(`${nameTeam(teamB)} gagne`);
-  };
-};
 function pushJson() {
   let teamNames = checkName(input_name_teamA, input_name_teamB);
   let data =[ 
@@ -277,5 +267,27 @@ function patinage(team) {
   return tempsfinalenplus;
 };
 function animation_result() {
-  
+  const voitureObjectifLune = document.getElementById("voitureObejctifLune");
+  const voitureEau = document.getElementById("voitureEau");
+  const buttonLast = document.getElementById("buttonLast");
+  let timeATanslaste = calculs(teamA)["tempsfinal"];
+  console.log(timeATanslaste)
+  console.log(timeATanslaste / 2)
+  let timeBTanslaste = calculs(teamB)["tempsfinal"];
+  console.log(timeBTanslaste)
+  console.log(timeBTanslaste / 2)
+  voitureObjectifLune.style.transition = `transform ${timeATanslaste / 2}s`; 
+  voitureEau.style.transition = `transform ${timeBTanslaste / 2}s`;
+  if(timeATanslaste < timeBTanslaste) {
+    voitureObjectifLune.style.transform = "translateX(1120px)";
+    voitureEau.style.transform = "translateX(860px)";
+  } else if(timeBTanslaste < timeATanslaste ) {
+    voitureEau.style.transform = "translateX(1120px)";
+    voitureObjectifLune.style.transform = "translateX(860px)";
+  } else if(timeATanslaste === timeBTanslaste){
+    voitureEau.style.transform = "translateX(1120px)";
+    voitureObjectifLune.style.transform = "translateX(1120px)";
+  }
+  typemsgresult()
+  buttonLast.style.display = "flex"
 }

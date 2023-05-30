@@ -80,12 +80,15 @@
       <div>
         <div id="rectangle" class="route">
           <div id="teamA" class="teamA">
-            <img src="../static/img/voiture_tintin_de_haut.png" alt="VOiture de l'équipe A vue de haut" class="voiture_tintin_vue_de_haut">
+            <img src="../static/img/voiture_tintin_de_haut.png" alt="VOiture de l'équipe A vue de haut" class="voiture_tintin_vue_de_haut" id="voitureObejctifLune">
           </div>
           <div class="center-band"></div>
           <div id="teamB" class="teamB">
-            <img src="../static/img/voiture_vue_de_haut_eau.png" alt=" voiture de l'équipe B vue de haut" class="voiture_eau_vue_de_haut">
+            <img src="../static/img/voiture_vue_de_haut_eau.png" alt=" voiture de l'équipe B vue de haut" class="voiture_eau_vue_de_haut" id="voitureEau">
           </div>
+        </div>
+        <div class="buttonAnimation">
+          <button type="button" onclick="animation_result()">Commencer l'animation</button>
         </div>
       </div>
       <div id="result_game">
@@ -93,7 +96,7 @@
         <h3 id="LoseInfo"></h3>
         <p id="GitInfo"></p>
       </div>
-      <div class="buttonLast">
+      <div class="buttonLast" id="buttonLast">
         <button type="button" onclick="location.reload()" class="btn-reload">Rejouer</button>
         <a href="./classement.html">
           <button type="button" class="btn-classement" style="height: 100%;">Classement</button>
@@ -106,7 +109,7 @@
         pushJson();
         let teamATime = calculs(teamA)["tempsfinal"];
         let teamBTime = calculs(teamB)["tempsfinal"];
-        console.log(teamATime, teamBTime ); //output: 8.682 10.500
+        console.log(teamATime, teamBTime ); //output: 
         let teamNames = checkName(input_name_teamA, input_name_teamB);
         let speed = 20;
         let GitInfo = `Pour plus d'information sur le projet vous pouvez aller voir le <a href="https://github.com/0verLighT/cec-web/blob/main/README.md">ReadMe</a> sur Github`;
